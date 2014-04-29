@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:library="clr-namespace:SampleApplication.Library"
         Title="MainWindow" Height="350" Width="525"
-        library:Localization.DesignTimeLanguage="uk">
+        library:Localization.DesignTimeLocale="uk">
     <Grid>
         <Label Content="{library:LocalizableText TestTestTest}"/>
     </Grid>

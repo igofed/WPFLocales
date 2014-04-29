@@ -8,14 +8,14 @@ namespace SampleApplication.Library
 {
     class Localization
     {
-        public static readonly DependencyProperty DesignTimeLanguageProperty = DependencyProperty.RegisterAttached("DesignTimeLanguage", typeof(string), typeof(Localization), new PropertyMetadata(null, OnDesignTimeLanguagePropertyChanged));
-        public static void SetDesignTimeLanguage(UIElement element, string value)
+        public static readonly DependencyProperty DesignTimeLocaleProperty = DependencyProperty.RegisterAttached("DesignTimeLocale", typeof(string), typeof(Localization), new PropertyMetadata(null, OnDesignTimeLanguagePropertyChanged));
+        public static void SetDesignTimeLocale(UIElement element, string value)
         {
-            element.SetValue(DesignTimeLanguageProperty, value);
+            element.SetValue(DesignTimeLocaleProperty, value);
         }
-        public static string GetDesignTimeLanguage(UIElement element)
+        public static string GetDesignTimeLocale(UIElement element)
         {
-            return (string)element.GetValue(DesignTimeLanguageProperty);
+            return (string)element.GetValue(DesignTimeLocaleProperty);
         }
         private static void OnDesignTimeLanguagePropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
@@ -35,7 +35,7 @@ namespace SampleApplication.Library
     [MarkupExtensionReturnType(typeof(string))]
     class LocalizableText : MarkupExtension
     {
-        private readonly string _title;
+        private readonly string _title = "";
         private DependencyObject _targetObject;
         private DependencyProperty _targetProperty;
         private DependencyObject _designTimeParent;
