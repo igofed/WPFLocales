@@ -2,7 +2,7 @@
 
 namespace SampleApplication.Library
 {
-    public class XmlLocaleItem
+    public class XmlLocaleItem : ILocaleItem
     {
         [XmlAttribute]
         public string Key { get; set; }
