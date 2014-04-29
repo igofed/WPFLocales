@@ -1,0 +1,5 @@
+﻿<Locale Key="EN">
+	<Group Key="Test">
+    <Item Key="Field">TEST</Item>
+	</Group>
+</Locale>

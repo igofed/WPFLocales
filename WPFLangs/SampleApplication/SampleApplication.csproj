@@ -62,9 +62,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Library\Locale.cs" />
     <Compile Include="Library\Localization.cs" />
-    <Compile Include="Library\LocalizationGroup.cs" />
-    <Compile Include="Library\LocalizationLanguage.cs" />
+    <Compile Include="Library\XmlLocaleGroup.cs" />
+    <Compile Include="Library\XmlLocaleItem.cs" />
+    <Compile Include="Library\XmlLocale.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -88,6 +90,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Locales\RU.locale">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Locales\EN.locale">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

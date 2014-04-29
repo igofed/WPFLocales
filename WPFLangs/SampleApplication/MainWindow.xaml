@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:library="clr-namespace:SampleApplication.Library"
         Title="MainWindow" Height="350" Width="525"
-        library:Localization.DesignTimeLocale="uk">
+        library:Localization.DesignTimeLocale="RU"
+        library:Localization.DesignTimeLocalesPath="SampleApplication/Locales">
     <Grid>
-        <Label Content="{library:LocalizableText TestTestTest}"/>
+        <Label Content="{library:LocalizableText {x:Static library:Locale+Test.Field}}"/>
     </Grid>
 </Window>
