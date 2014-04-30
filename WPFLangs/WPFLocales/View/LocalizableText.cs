@@ -8,36 +8,28 @@ namespace WPFLocales.View
     [MarkupExtensionReturnType(typeof(string))]
     public class LocalizableText : MarkupExtension
     {
-        private readonly string _groupKey;
-        private readonly string _itemKey;
+        private readonly Enum _key;
         private DependencyObject _targetObject;
         private DependencyProperty _targetProperty;
         private DependencyObject _designTimeParent;
 
         public LocalizableText(Enum key)
         {
-            _groupKey = key.GetType().Name;
-            _itemKey = key.ToString();
+            _key = key;
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             var providerValuetarget = (IProvideValueTarget)serviceProvider.GetService(typeof(IProvideValueTarget));
-
             _targetObject = (DependencyObject)providerValuetarget.TargetObject;
             _targetProperty = (DependencyProperty)providerValuetarget.TargetProperty;
 
 
-            var text = "No such locale available";
-
+            var text = "No locale available or design time locale didn't specified";
             if (DesignerProperties.GetIsInDesignMode(_targetObject))
             {
-                if (_designTimeParent == null)
-                {
-                    Localization.DesignTimeLocaleChanged += OnLocalizationDesignTimeLocaleChanged;
-
-                    _designTimeParent = FindDesignTimeLocaleParent();
-                }
+                Localization.DesignTimeLocaleChanged += OnLocalizationDesignTimeLocaleChanged;
+                _designTimeParent = FindDesignTimeLocaleParent();
 
                 if (_designTimeParent != null)
                 {
@@ -45,13 +37,15 @@ namespace WPFLocales.View
 
                     text = GetDesignTimeText(locale);
                 }
-
-                return text;
             }
             else
             {
-                return text;
+                Localization.LocaleChanged += OnLocalizationLocaleChanged;
+
+                text = GetProductionTimeText();
             }
+
+            return text;
         }
 
         private void OnLocalizationDesignTimeLocaleChanged(DependencyObject designTimeParent, string newLanguage)
@@ -85,15 +79,18 @@ namespace WPFLocales.View
         {
             var text = "No such locale available";
 
+            var groupKey = _key.GetType().Name;
+            var itemKey = _key.ToString();
+
             if (Localization.DesignTimeLocaleDictionary.ContainsKey(locale))
             {
                 var groups = Localization.DesignTimeLocaleDictionary[locale];
-                if (groups.ContainsKey(_groupKey))
+                if (groups.ContainsKey(groupKey))
                 {
-                    var fields = groups[_groupKey];
-                    if (fields.ContainsKey(_itemKey))
+                    var fields = groups[groupKey];
+                    if (fields.ContainsKey(itemKey))
                     {
-                        text = fields[_itemKey];
+                        text = fields[itemKey];
                     }
                 }
             }
@@ -101,9 +98,15 @@ namespace WPFLocales.View
             return text;
         }
 
+
+        private void OnLocalizationLocaleChanged()
+        {
+            _targetObject.SetValue(_targetProperty, GetProductionTimeText());
+        }
+
         private string GetProductionTimeText()
         {
-            return "";
+            return Localization.GetTextByKey(_key);
         }
     }
 }
