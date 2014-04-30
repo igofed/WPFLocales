@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Markup;
 using System.Xml.Serialization;
+using WPFLocales.Model;
+using WPFLocales.Xml;
 
-namespace SampleApplication.Library
+namespace WPFLocales
 {
-    class Localization
+    public class Localization
     {
         public static readonly DependencyProperty DesignTimeLocaleProperty = DependencyProperty.RegisterAttached("DesignTimeLocale", typeof(string), typeof(Localization), new PropertyMetadata(null, OnDesignTimeLanguagePropertyChanged));
         public static void SetDesignTimeLocale(UIElement element, string value)
@@ -45,7 +44,6 @@ namespace SampleApplication.Library
             if (dependencyPropertyChangedEventArgs.NewValue == null)
                 return;
 
-
             var path = (string)dependencyPropertyChangedEventArgs.NewValue;
 
             var locales = new List<string>();
@@ -71,12 +69,12 @@ namespace SampleApplication.Library
                 }
             }
 
-            using (var writer = new StreamWriter("file.log"))
-            {
-                writer.WriteLine(string.Join(";", locales));
-            }
-
             Locales = new ReadOnlyCollection<string>(locales);
+
+            foreach (var keyValue in DesignTimeLocales)
+            {
+                DesignTimeLocaleChanged(keyValue.Key, keyValue.Value);
+            }
         }
 
         internal static event Action<DependencyObject, string> DesignTimeLocaleChanged = (d, l) => { };
@@ -90,106 +88,33 @@ namespace SampleApplication.Library
             DesignTimeLocales = new Dictionary<DependencyObject, string>();
         }
 
-        public static ReadOnlyCollection<string> Locales { get; set; }
+
+        public static ReadOnlyCollection<string> Locales { get; private set; }
         public static string CurrentLocale { get; set; }
         public static Dictionary<string, Dictionary<string, string>> CurrentLocaleDictionary { get; set; }
-    }
 
-    [MarkupExtensionReturnType(typeof(string))]
-    class LocalizableText : MarkupExtension
-    {
-        private readonly string _groupName;
-        private readonly string _fieldName;
-        private DependencyObject _targetObject;
-        private DependencyProperty _targetProperty;
-        private DependencyObject _designTimeParent;
 
-        public LocalizableText(Enum title)
+        public static string GetTextByKey(Enum key)
         {
-            _groupName = title.GetType().Name;
-            _fieldName = title.ToString();
-        }
-
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            var text = "No such locale available";
-
-            var providerValuetarget = (IProvideValueTarget)serviceProvider.GetService(typeof(IProvideValueTarget));
-
-            _targetObject = (DependencyObject)providerValuetarget.TargetObject;
-            _targetProperty = (DependencyProperty)providerValuetarget.TargetProperty;
-
-            if (DesignerProperties.GetIsInDesignMode(_targetObject))
-            {
-                if (_designTimeParent == null)
-                {
-                    Localization.DesignTimeLocaleChanged += OnLocalizationDesignTimeLocaleChanged;
-
-                    _designTimeParent = FindDesignTimeLocaleParent();
-                }
-
-                if (_designTimeParent != null)
-                {
-                    var language = Localization.DesignTimeLocales[_designTimeParent];
-
-                    text = GetText(language);
-                }
-
-                return text;
-            }
-            else
-            {
-                return text;
-            }
-
-            return text;
-        }
-
-        private void OnLocalizationDesignTimeLocaleChanged(DependencyObject designTimeParent, string newLanguage)
-        {
-            if (_designTimeParent == null)
-            {
-                _designTimeParent = FindDesignTimeLocaleParent();
-            }
-
-            if (designTimeParent == _designTimeParent)
-            {
-                _targetObject.SetValue(_targetProperty, GetText(newLanguage));
-            }
-        }
-
-        private DependencyObject FindDesignTimeLocaleParent()
-        {
-            var currentObject = _targetObject;
-            do
-            {
-                if (Localization.DesignTimeLocales.ContainsKey(currentObject))
-                {
-                    return currentObject;
-                }
-            } while ((currentObject = LogicalTreeHelper.GetParent(currentObject)) != null);
+            var groupName = key.GetType().Name;
+            var itemName = key.ToString();
 
             return null;
         }
 
-        private string GetText(string language)
+        public static void RegisterLocaleClass(ILocale locale)
         {
-            var text = "No such locale available";
+            
+        }
 
-            if (Localization.DesignTimeLocaleDictionary.ContainsKey(language))
-            {
-                var groups = Localization.DesignTimeLocaleDictionary[language];
-                if (groups.ContainsKey(_groupName))
-                {
-                    var fields = groups[_groupName];
-                    if (fields.ContainsKey(_fieldName))
-                    {
-                        text = fields[_fieldName];
-                    }
-                }
-            }
+        public static void RegisterLocaleFile(FileInfo file)
+        {
+            
+        }
 
-            return text;
+        public static void RegisterLocalesDirectory(DirectoryInfo directory)
+        {
+            
         }
     }
 }

@@ -1,22 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using WPFLocales.Model;
 
-namespace SampleApplication.Library
+namespace WPFLocales.Xml
 {
-    public class XmlLocaleGroup : ILocaleGroup
+    [XmlRoot("Locale")]
+    public class XmlLocale : ILocale
     {
         [XmlAttribute]
         public string Key { get; set; }
-        [XmlElement("Item")]
-        public List<XmlLocaleItem> Items { get; set; }
 
+        [XmlElement("Group")]
+        public List<XmlLocaleGroup> Groups { get; set; }
 
-        List<ILocaleItem> ILocaleGroup.Items
+        List<ILocaleGroup> ILocale.Groups
         {
             get
             {
-                return Items.Cast<ILocaleItem>().ToList();
+                return Groups.Cast<ILocaleGroup>().ToList();
             }
             set
             {

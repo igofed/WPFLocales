@@ -1,5 +1,4 @@
-﻿using System;
-namespace SampleApplication.Library
+﻿namespace SampleApplication
 {
     static class Locale
     {
@@ -7,10 +6,5 @@ namespace SampleApplication.Library
         {
             Field
         }
-    }
-
-    public enum Test
-    {
-        Field
     }
 }

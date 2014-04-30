@@ -1,6 +1,7 @@
 ﻿using System.Xml.Serialization;
+using WPFLocales.Model;
 
-namespace SampleApplication.Library
+namespace WPFLocales.Xml
 {
     public class XmlLocaleItem : ILocaleItem
     {

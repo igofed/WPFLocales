@@ -62,11 +62,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Library\Locale.cs" />
-    <Compile Include="Library\Localization.cs" />
-    <Compile Include="Library\XmlLocaleGroup.cs" />
-    <Compile Include="Library\XmlLocaleItem.cs" />
-    <Compile Include="Library\XmlLocale.cs" />
+    <Compile Include="Locale.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -104,6 +100,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WPFLocales\WPFLocales.csproj">
+      <Project>{5f84b180-22a9-4c72-8e3b-a0c5d72b0868}</Project>
+      <Name>WPFLocales</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
