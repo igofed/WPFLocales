@@ -11,7 +11,6 @@ namespace WPFLocales.View
         private readonly Enum _key;
         private DependencyObject _targetObject;
         private DependencyProperty _targetProperty;
-        private DependencyObject _designTimeParent;
 
         public LocalizableText(Enum key)
         {
@@ -24,25 +23,18 @@ namespace WPFLocales.View
             _targetObject = (DependencyObject)providerValuetarget.TargetObject;
             _targetProperty = (DependencyProperty)providerValuetarget.TargetProperty;
 
-
-            var text = "No locale available or design time locale didn't specified";
+            string text;
             if (DesignerProperties.GetIsInDesignMode(_targetObject))
             {
                 Localization.DesignTimeLocaleChanged += OnLocalizationDesignTimeLocaleChanged;
-                _designTimeParent = FindDesignTimeLocaleParent();
-
-                if (_designTimeParent != null)
-                {
-                    var locale = Localization.DesignTimeLocales[_designTimeParent];
-
-                    text = GetDesignTimeText(locale);
-                }
+                
+                text = Localization.GetTextByKey(_targetObject, _key);
             }
             else
             {
                 Localization.LocaleChanged += OnLocalizationLocaleChanged;
 
-                text = GetProductionTimeText();
+                text = Localization.GetTextByKey(_key);
             }
 
             return text;
@@ -50,63 +42,13 @@ namespace WPFLocales.View
 
         private void OnLocalizationDesignTimeLocaleChanged(DependencyObject designTimeParent, string newLanguage)
         {
-            if (_designTimeParent == null)
-            {
-                _designTimeParent = FindDesignTimeLocaleParent();
-            }
-
-            if (designTimeParent == _designTimeParent)
-            {
-                _targetObject.SetValue(_targetProperty, GetDesignTimeText(newLanguage));
-            }
+            var text = Localization.GetTextByKey(_targetObject, _key);
+            _targetObject.SetValue(_targetProperty, text);
         }
-
-        private DependencyObject FindDesignTimeLocaleParent()
-        {
-            var currentObject = _targetObject;
-            do
-            {
-                if (Localization.DesignTimeLocales.ContainsKey(currentObject))
-                {
-                    return currentObject;
-                }
-            } while ((currentObject = LogicalTreeHelper.GetParent(currentObject)) != null);
-
-            return null;
-        }
-
-        private string GetDesignTimeText(string locale)
-        {
-            var text = "No such locale available";
-
-            var groupKey = _key.GetType().Name;
-            var itemKey = _key.ToString();
-
-            if (Localization.DesignTimeLocaleDictionary.ContainsKey(locale))
-            {
-                var groups = Localization.DesignTimeLocaleDictionary[locale];
-                if (groups.ContainsKey(groupKey))
-                {
-                    var fields = groups[groupKey];
-                    if (fields.ContainsKey(itemKey))
-                    {
-                        text = fields[itemKey];
-                    }
-                }
-            }
-
-            return text;
-        }
-
 
         private void OnLocalizationLocaleChanged()
         {
-            _targetObject.SetValue(_targetProperty, GetProductionTimeText());
-        }
-
-        private string GetProductionTimeText()
-        {
-            return Localization.GetTextByKey(_key);
+            _targetObject.SetValue(_targetProperty, Localization.GetTextByKey(_key));
         }
     }
 }

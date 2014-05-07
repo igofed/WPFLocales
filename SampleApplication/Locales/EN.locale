@@ -1,5 +1,9 @@
 ﻿<Locale Key="EN">
-	<Group Key="Test">
-    <Item Key="Field">TEST</Item>
-	</Group>
+	<Group Key="SampleApplication">
+    <Item Key="StateLabelContent">State:</Item>
+    <Item Key="StateErrorText">Error</Item>
+    <Item Key="StateOkText">OK</Item>
+    <Item Key="ChangeStateButtonContent">Change state</Item>
+    <Item Key="LocaleLabelContent">Locale:</Item>
+  </Group>
 </Locale>

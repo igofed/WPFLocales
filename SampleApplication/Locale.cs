@@ -2,9 +2,13 @@
 {
     static class Locale
     {
-        public enum Test
+        public enum SampleApplication   
         {
-            Field
+            StateLabelContent,
+            StateOkText,
+            StateErrorText,
+            ChangeStateButtonContent,
+            LocaleLabelContent
         }
     }
 }
