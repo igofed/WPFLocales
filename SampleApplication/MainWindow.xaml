@@ -16,12 +16,12 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-                <Label Content="{view:LocalizableText {x:Static sampleApplication:Locale+SampleApplication.StateLabelContent}}"/>
+                <Label Content="{view:LocalizableText Key={x:Static sampleApplication:LocaleKeys+SampleApplication.StateLabelContent}}"/>
                 <Label Content="{Binding State, Converter={sampleApplication:StateToTextConverter}}"/>
             </StackPanel>
-            <Button Content="{view:LocalizableText {x:Static sampleApplication:Locale+SampleApplication.ChangeStateButtonContent}}" Command="{Binding ChangeStateCommand}"/>
+            <Button Content="{view:LocalizableText Key={x:Static sampleApplication:LocaleKeys+SampleApplication.ChangeStateButtonContent}}" Command="{Binding ChangeStateCommand}"/>
             <StackPanel Orientation="Horizontal">
-                <Label Content="{view:LocalizableText {x:Static sampleApplication:Locale+SampleApplication.LocaleLabelContent}}"/>
+                <Label Content="{view:LocalizableText Key={x:Static sampleApplication:LocaleKeys+SampleApplication.LocaleLabelContent}}"/>
                 <ComboBox ItemsSource="{Binding Locales}" SelectedItem="{Binding CurrentLocale, Mode=TwoWay}"/>
             </StackPanel>
         </StackPanel>

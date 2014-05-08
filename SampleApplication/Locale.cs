@@ -1,6 +1,6 @@
 ﻿namespace SampleApplication
 {
-    static class Locale
+    public static class LocaleKeys
     {
         public enum SampleApplication   
         {

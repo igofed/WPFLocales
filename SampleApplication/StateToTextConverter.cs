@@ -17,9 +17,9 @@ namespace SampleApplication
             {
                 var state = (State)value;
                 if (state == State.Error)
-                    return GetLocalizedString(Locale.SampleApplication.StateErrorText);
+                    return GetLocalizedString(LocaleKeys.SampleApplication.StateErrorText);
                 if(state == State.Ok)
-                    return GetLocalizedString(Locale.SampleApplication.StateOkText);
+                    return GetLocalizedString(LocaleKeys.SampleApplication.StateOkText);
             }
             return "";
         }

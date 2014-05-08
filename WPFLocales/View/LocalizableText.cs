@@ -8,13 +8,42 @@ namespace WPFLocales.View
     [MarkupExtensionReturnType(typeof(string))]
     public class LocalizableText : MarkupExtension
     {
-        private readonly Enum _key;
         private DependencyObject _targetObject;
         private DependencyProperty _targetProperty;
+        private bool _isDesignMode;
 
-        public LocalizableText(Enum key)
+        public Enum Key
         {
-            _key = key;
+            get
+            {
+                return _key;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    _key = value;
+                    if (_targetObject != null && _targetProperty != null)
+                    {
+                        string text;
+                        if (_isDesignMode)
+                        {
+                            text = Localization.GetTextByKey(_targetObject, _key);
+                        }
+                        else
+                        {
+                            text = Localization.GetTextByKey(_key);
+                        }
+                        _targetObject.SetValue(_targetProperty, text);
+                    }
+                }
+            }
+        }
+        private Enum _key;
+
+        public LocalizableText()
+        {
+
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
@@ -23,18 +52,22 @@ namespace WPFLocales.View
             _targetObject = (DependencyObject)providerValuetarget.TargetObject;
             _targetProperty = (DependencyProperty)providerValuetarget.TargetProperty;
 
-            string text;
-            if (DesignerProperties.GetIsInDesignMode(_targetObject))
+            _isDesignMode = DesignerProperties.GetIsInDesignMode(_targetObject);
+
+            string text = "Key not set yet";
+            if (_isDesignMode)
             {
                 Localization.DesignTimeLocaleChanged += OnLocalizationDesignTimeLocaleChanged;
-                
-                text = Localization.GetTextByKey(_targetObject, _key);
+
+                if (_key != null)
+                    text = Localization.GetTextByKey(_targetObject, _key);
             }
             else
             {
                 Localization.LocaleChanged += OnLocalizationLocaleChanged;
 
-                text = Localization.GetTextByKey(_key);
+                if (_key != null)
+                    text = Localization.GetTextByKey(_key);
             }
 
             return text;
@@ -42,13 +75,15 @@ namespace WPFLocales.View
 
         private void OnLocalizationDesignTimeLocaleChanged(DependencyObject designTimeParent, string newLanguage)
         {
-            var text = Localization.GetTextByKey(_targetObject, _key);
-            _targetObject.SetValue(_targetProperty, text);
+            if (_key != null)
+                _targetObject.SetValue(_targetProperty, Localization.GetTextByKey(_targetObject, _key));
+
         }
 
         private void OnLocalizationLocaleChanged()
         {
-            _targetObject.SetValue(_targetProperty, Localization.GetTextByKey(_key));
+            if (_key != null)
+                _targetObject.SetValue(_targetProperty, Localization.GetTextByKey(_key));
         }
     }
 }
