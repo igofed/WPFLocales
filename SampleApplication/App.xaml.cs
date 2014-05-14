@@ -15,12 +15,6 @@ namespace SampleApplication
         {
             Localization.Initialize(new DirectoryInfo("Locales"), "RU");
             base.OnStartup(e);
-
-            Task.Run(() =>
-            {
-                Thread.Sleep(5000);
-                Dispatcher.Invoke(() => Localization.CurrentLocale = "EN");
-            });
         }
     }
 }

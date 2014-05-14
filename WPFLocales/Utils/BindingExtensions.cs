@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -30,21 +31,34 @@ namespace WPFLocales.Utils
             }
         }
 
-        internal static void UpdateBindings(this DependencyObject dependencyObject, Action<DependencyObject, DependencyProperty> process)
+        internal static IEnumerable<DependencyProperty> GetDependencyProperties(this DependencyObject dependencyObject)
         {
-            foreach (var element in dependencyObject.EnumerateVisualDescendents())
+            foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(dependencyObject, new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.All) }))
             {
-                var localValueEnumerator = element.GetLocalValueEnumerator();
-                while (localValueEnumerator.MoveNext())
+                var dpd = DependencyPropertyDescriptor.FromProperty(pd);
+
+                if (dpd != null)
                 {
-                    process(element, localValueEnumerator.Current.Property);
+                    yield return dpd.DependencyProperty;
                 }
             }
         }
 
+        internal static void EnumElementsWithProperties(this DependencyObject dependencyObject, Action<DependencyObject, DependencyProperty> process)
+        {
+            foreach (var element in dependencyObject.EnumerateVisualDescendents())
+            {
+                foreach (var  property in element.GetDependencyProperties())
+                {
+                    process(element, property);
+                }
+            }
+        }
+
+
         internal static void UpdateBindingTargets(this DependencyObject dependencyObject)
         {
-            dependencyObject.UpdateBindings((element, property) =>
+            dependencyObject.EnumElementsWithProperties((element, property) =>
             {
                 var bindingExpression = BindingOperations.GetBindingExpressionBase(element, property);
                 if (bindingExpression != null)
@@ -56,7 +70,7 @@ namespace WPFLocales.Utils
 
         internal static void UpdateBindingConverterParents(this DependencyObject dependencyObject)
         {
-            dependencyObject.UpdateBindings((element, property) =>
+            dependencyObject.EnumElementsWithProperties((element, property) =>
             {
                 var binding = BindingOperations.GetBinding(element, property);
                 if (binding != null)

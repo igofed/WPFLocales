@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -15,6 +16,8 @@ namespace SampleApplication
         }
         private State _state;
 
+        public ObservableCollection<State> States { get; set; }
+
         public ObservableCollection<string> Locales { get; set; }
         public string CurrentLocale
         {
@@ -28,6 +31,7 @@ namespace SampleApplication
         public ViewModel()
         {
             Locales = new ObservableCollection<string>(Localization.Locales);
+            States = new ObservableCollection<State>(new[] { State.Error, State.Ok });
             ChangeStateCommand = new DelegateCommand(() =>
             {
                 State = State == State.Error ? State.Ok : State.Error;

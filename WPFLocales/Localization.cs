@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Xml.Serialization;
 using WPFLocales.Utils;
 using WPFLocales.Xml;
@@ -15,6 +16,7 @@ namespace WPFLocales
     public class Localization
     {
         #region DesignTime
+
         public static readonly DependencyProperty DesignTimeLocaleProperty = DependencyProperty.RegisterAttached("DesignTimeLocale", typeof(string), typeof(Localization), new PropertyMetadata(null, OnDesignTimeLocalePropertyChanged));
         public static void SetDesignTimeLocale(Control element, string value)
         {
@@ -26,33 +28,34 @@ namespace WPFLocales
         }
         private static void OnDesignTimeLocalePropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            using (var writer = new StreamWriter("log.log", true))
-            {
-                writer.WriteLine("OnDesignTimeLocalePropertyChanged");
-            }
-
             if (!DesignerProperties.GetIsInDesignMode(dependencyObject))
                 return;
 
-            if (DesignTimeLocales == null) DesignTimeLocales = new Dictionary<DependencyObject, string>();
+            if (_designTimeLocales == null) _designTimeLocales = new Dictionary<DependencyObject, string>();
 
             var newLanguage = (string)dependencyPropertyChangedEventArgs.NewValue;
-            DesignTimeLocales[dependencyObject] = newLanguage;
-
-            DesignTimeLocaleChanged(dependencyObject, newLanguage);
+            _designTimeLocales[dependencyObject] = newLanguage;
 
             var control = dependencyObject as Control;
             if (!control.IsLoaded)
             {
                 control.Loaded += (sender, args) =>
                 {
+                    using (var writer = new StreamWriter("log.log", true))
+                    {
+                        writer.WriteLine("LOADED");
+                    }
                     dependencyObject.UpdateBindingConverterParents();
                     dependencyObject.UpdateBindingTargets();
+
+                    DesignTimeLocaleChanged();
                 };
             }
             else
             {
                 dependencyObject.UpdateBindingTargets();
+
+                DesignTimeLocaleChanged();
             }
         }
 
@@ -67,11 +70,6 @@ namespace WPFLocales
         }
         private static void OnDesignTimeLocalesPathPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            using (var writer = new StreamWriter("log.log", true))
-            {
-                writer.WriteLine("OnDesignTimeLocalesPathPropertyChanged");
-            }
-
             if (!DesignerProperties.GetIsInDesignMode(dependencyObject))
                 return;
 
@@ -105,17 +103,17 @@ namespace WPFLocales
 
             Locales = new ReadOnlyCollection<string>(locales);
 
-            foreach (var keyValue in DesignTimeLocales)
+            foreach (var keyValue in _designTimeLocales)
             {
-                DesignTimeLocaleChanged(keyValue.Key, keyValue.Value);
+                DesignTimeLocaleChanged();
                 keyValue.Key.UpdateBindingTargets();
             }
         }
 
-        internal static event Action<DependencyObject, string> DesignTimeLocaleChanged = (d, l) => { };
-        internal static Dictionary<DependencyObject, string> DesignTimeLocales { get; set; }
-        internal static Dictionary<DependencyObject, DependencyObject> DesignTimeLocaleParents { get; set; }
-        internal static Dictionary<string, Dictionary<string, Dictionary<string, string>>> DesignTimeLocaleDictionary { get; set; }
+        internal static event Action DesignTimeLocaleChanged = () => { };
+        private static Dictionary<DependencyObject, string> _designTimeLocales;
+        private static readonly Dictionary<DependencyObject, DependencyObject> DesignTimeLocaleParents;
+        private static readonly Dictionary<string, Dictionary<string, Dictionary<string, string>>> DesignTimeLocaleDictionary;
 
         internal static string GetTextByKey(DependencyObject element, Enum key)
         {
@@ -135,7 +133,7 @@ namespace WPFLocales
             if (localeParent == null)
                 return text;
 
-            var locale = DesignTimeLocales[localeParent];
+            var locale = _designTimeLocales[localeParent];
             var groupKey = key.GetType().Name;
             var itemKey = key.ToString();
 
@@ -160,11 +158,11 @@ namespace WPFLocales
             var currentElement = element;
             do
             {
-                if (DesignTimeLocales.ContainsKey(currentElement))
+                if (_designTimeLocales.ContainsKey(currentElement))
                 {
                     return currentElement;
                 }
-            } while ((currentElement = LogicalTreeHelper.GetParent(currentElement)) != null);
+            } while ((currentElement = VisualTreeHelper.GetParent(currentElement)) != null);
 
             return null;
         }
@@ -174,11 +172,12 @@ namespace WPFLocales
         static Localization()
         {
             DesignTimeLocaleDictionary = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
-            DesignTimeLocales = new Dictionary<DependencyObject, string>();
+            _designTimeLocales = new Dictionary<DependencyObject, string>();
             DesignTimeLocaleParents = new Dictionary<DependencyObject, DependencyObject>();
         }
 
         #region ProductionTime
+
         public static void Initialize(DirectoryInfo localesPath, string defaultLocale, string currentLocale = null)
         {
             if (!localesPath.Exists || !localesPath.GetFiles().Any(f => f.FullName.EndsWith(".locale")))
@@ -220,13 +219,14 @@ namespace WPFLocales
             DefaultLocale = defaultLocale;
             CurrentLocale = defaultLocale;
         }
-
+        
+        private static Dictionary<string, Dictionary<string, string>> _currentLocaleDictionary;
         private static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _allLocalesDictionary;
-        private static string _currentLocale;
 
         public static event Action LocaleChanged = () => { };
         public static ReadOnlyCollection<string> Locales { get; private set; }
         public static string DefaultLocale { get; private set; }
+
         public static string CurrentLocale
         {
             get { return _currentLocale; }
@@ -243,15 +243,15 @@ namespace WPFLocales
 
                 _currentLocale = value;
 
-                CurrentLocaleDictionary = _allLocalesDictionary[value];
+                _currentLocaleDictionary = _allLocalesDictionary[value];
 
                 LocaleChanged();
 
                 Application.Current.UpdateBindingTargets();
             }
         }
-        public static Dictionary<string, Dictionary<string, string>> CurrentLocaleDictionary { get; private set; }
-
+        private static string _currentLocale;
+       
         public static string GetTextByKey(Enum key)
         {
             var groupName = key.GetType().Name;
@@ -260,10 +260,10 @@ namespace WPFLocales
             if (!string.IsNullOrEmpty(CurrentLocale))
             {
                 Dictionary<string, string> group;
-                if (CurrentLocaleDictionary.TryGetValue(groupName, out group))
+                if (_currentLocaleDictionary.TryGetValue(groupName, out group))
                 {
                     string item;
-                    if (CurrentLocaleDictionary[groupName].TryGetValue(itemName, out item))
+                    if (_currentLocaleDictionary[groupName].TryGetValue(itemName, out item))
                     {
                         return item;
                     }
@@ -282,6 +282,7 @@ namespace WPFLocales
                 throw new NotSupportedException("Current locale didn't selected");
             }
         }
+
         #endregion
     }
 }
