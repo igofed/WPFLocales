@@ -4,7 +4,7 @@ using WPFLocales.View;
 
 namespace SampleApplication
 {
-    class StateToTextConverter : LocalizableConverter
+    public class StateToTextConverter : LocalizableConverter
     {
         public StateToTextConverter()
         {

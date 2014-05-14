@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Markup;
 
@@ -10,9 +10,9 @@ namespace WPFLocales.View
     [MarkupExtensionReturnType(typeof(string))]
     public class LocalizableText : MarkupExtension
     {
+        private readonly bool _isInDesignMode;
         private readonly HashSet<DependencyObject> _targetObjects;
         private DependencyProperty _targetProperty;
-        private readonly static bool IsDesignMode;
 
         public Enum Key
         {
@@ -28,18 +28,13 @@ namespace WPFLocales.View
                 _key = value;
 
                 UpdateTarget();
-
             }
         }
         private Enum _key;
 
-        static LocalizableText()
-        {
-            IsDesignMode = DesignerProperties.GetIsInDesignMode(new DependencyObject());
-        }
-
         public LocalizableText()
         {
+            _isInDesignMode = DesignerProperties.GetIsInDesignMode(new DependencyObject());
             _targetObjects = new HashSet<DependencyObject>();
         }
 
@@ -53,44 +48,24 @@ namespace WPFLocales.View
 
             var targetObject = providerValuetarget.TargetObject as DependencyObject;
             var targetProperty = providerValuetarget.TargetProperty as DependencyProperty;
-            if (targetObject != null && targetProperty != null)
+
+            if (targetObject == null || targetProperty == null)
+                throw new NotSupportedException("LocalizableText supported only for dependency properties");
+
+            if (!_targetObjects.Contains(targetObject))
+            {
+                _targetObjects.Add(targetObject);
+            }
+            if (_targetObjects.Count == 1)
             {
                 _targetProperty = targetProperty;
 
-                if (!_targetObjects.Contains(targetObject))
-                {
-                    _targetObjects.Add(targetObject);
-                }
+                Localization.LocaleChanged += OnLocalizationLocaleChanged;
             }
 
-            var text = "Key not set yet";
-            if (_key == null)
-                return text;
-            
-            if (IsDesignMode)
-            {
-                if(_targetObjects.Count == 1)
-                { 
-                    Localization.DesignTimeLocaleChanged += OnLocalizationDesignTimeLocaleChanged;
-                }
-
-                text = Localization.GetTextByKey(targetObject, _key);
-            }
-            else
-            {
-                if (_targetObjects.Count == 1)
-                {
-                    Localization.LocaleChanged += OnLocalizationLocaleChanged;
-                }
-                text = Localization.GetTextByKey(_key);
-            }
+            var text = _key == null ? "Key not set yet" : GetTextByKey();
 
             return text;
-        }
-
-        private void OnLocalizationDesignTimeLocaleChanged()
-        {
-            UpdateTarget();
         }
 
         private void OnLocalizationLocaleChanged()
@@ -105,12 +80,15 @@ namespace WPFLocales.View
 
             foreach (var targetObject in _targetObjects)
             {
-                var text = IsDesignMode
-                    ? Localization.GetTextByKey(targetObject, _key)
-                    : Localization.GetTextByKey(_key);
+                var text = _isInDesignMode ? Localization.GetTextByKey(targetObject, _key) : Localization.GetTextByKey(_key);
 
                 targetObject.SetValue(_targetProperty, text);
             }
+        }
+
+        private string GetTextByKey()
+        {
+            return _isInDesignMode ? Localization.GetTextByKey(_targetObjects.First(), _key) : Localization.GetTextByKey(_key);
         }
     }
 }

@@ -15,10 +15,16 @@
         d:DataContext="{d:DesignInstance sampleApplication:ViewModel, IsDesignTimeCreatable=True}">
     <Grid>
         <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="{view:LocalizableText Key={x:Static sampleApplication:LocaleKeys+SampleApplication.StateLabelContent}}"/>
-                <Label Content="{Binding State, Converter={sampleApplication:StateToTextConverter}}"/>
-            </StackPanel>
+            <Label>
+                <Label.Content>
+                    <Binding Path="State">
+                        <Binding.Converter>
+                            <sampleApplication:StateToTextConverter FormatKey="{x:Static sampleApplication:LocaleKeys+SampleApplication.StateLabelContentFormat}"/>
+                        </Binding.Converter>
+                    </Binding>
+                </Label.Content>
+            </Label>
+            
             <Button Content="{view:LocalizableText Key={x:Static sampleApplication:LocaleKeys+SampleApplication.ChangeStateButtonContent}}" Command="{Binding ChangeStateCommand}"/>
             <ListView ItemsSource="{Binding States}">
                 <ListView.ItemTemplate>

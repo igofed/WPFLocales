@@ -1,6 +1,7 @@
 ﻿<Locale Key="RU">
 	<Group Key="SampleApplication">
     <Item Key="StateLabelContent">Состояние:</Item>
+    <Item Key="StateLabelContentFormat">Состояние: {0}</Item>
     <Item Key="StateErrorText">Ошибка</Item>
     <Item Key="StateOkText">Норма</Item>
     <Item Key="ChangeStateButtonContent">Именить состояние</Item>

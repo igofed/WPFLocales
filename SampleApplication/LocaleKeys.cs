@@ -5,6 +5,7 @@
         public enum SampleApplication   
         {
             StateLabelContent,
+            StateLabelContentFormat,
             StateOkText,
             StateErrorText,
             ChangeStateButtonContent,

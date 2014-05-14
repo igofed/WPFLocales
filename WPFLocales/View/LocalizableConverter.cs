@@ -1,24 +1,32 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
+using WPFLocales.Utils;
 
 namespace WPFLocales.View
 {
     public abstract class LocalizableConverter : MarkupExtension, IValueConverter
     {
         /// <summary>
+        /// FormatKey for converted value
+        /// </summary>
+        public Enum FormatKey { get { return _formatKey; } set { _formatKey = value; if(ParentDependencyObject != null) ParentDependencyObject.UpdateBindingTargets(); } }
+        private Enum _formatKey;
+
+        /// <summary>
         /// Element which is parent of Binding which uses current converter
         /// </summary>
         internal DependencyObject ParentDependencyObject { get; set; }
 
-        private readonly bool _isDesignMode;
+        private readonly bool _isInDesignMode;
 
         protected LocalizableConverter()
         {
-            _isDesignMode = DesignerProperties.GetIsInDesignMode(new DependencyObject());
+            _isInDesignMode = DesignerProperties.GetIsInDesignMode(new DependencyObject());
         }
 
         public abstract object Convert(object value, Type targetType, object parameter, CultureInfo culture);
@@ -26,10 +34,6 @@ namespace WPFLocales.View
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            var target = (IProvideValueTarget)serviceProvider.GetService(typeof(IProvideValueTarget));
-            if (!(target.TargetObject is Binding))
-                throw new NotSupportedException("This converter should be used only as MarkupExtension and should be not created as resource");
-
             return this;
         }
 
@@ -37,10 +41,25 @@ namespace WPFLocales.View
         /// Return localized string for current key
         /// </summary>
         /// <param name="key">Key of localization</param>
+        /// <param name="withFormating">Is use Format property to format output string. True by default</param>
         /// <returns></returns>
-        protected string GetLocalizedString(Enum key)
+        protected string GetLocalizedString(Enum key, bool withFormating = true)
         {
-            var text = _isDesignMode ? Localization.GetTextByKey(ParentDependencyObject, key) : Localization.GetTextByKey(key);
+           
+            var text = _isInDesignMode ? Localization.GetTextByKey(ParentDependencyObject, key) : Localization.GetTextByKey(key);
+
+            if (withFormating && FormatKey != null)
+            {
+                var format = _isInDesignMode ? Localization.GetTextByKey(ParentDependencyObject, FormatKey) : Localization.GetTextByKey(FormatKey);
+                text = string.Format(format, text);
+
+                using (var writer = new StreamWriter("log.log", true))
+                {
+                    writer.Write("Parent: " + (ParentDependencyObject == null ? "NULL" : ParentDependencyObject.ToString()));
+                    writer.Write("; Text: " + text);
+                    writer.WriteLine();
+                }
+            }
 
             return text;
         }

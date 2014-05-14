@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -24,7 +23,6 @@ namespace SampleApplication
             get { return Localization.CurrentLocale; }
             set { Localization.CurrentLocale = value; RaisePropertyChanged(); }
         }
-
 
         public ICommand ChangeStateCommand { get; set; }
 

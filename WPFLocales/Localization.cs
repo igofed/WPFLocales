@@ -41,21 +41,17 @@ namespace WPFLocales
             {
                 control.Loaded += (sender, args) =>
                 {
-                    using (var writer = new StreamWriter("log.log", true))
-                    {
-                        writer.WriteLine("LOADED");
-                    }
                     dependencyObject.UpdateBindingConverterParents();
                     dependencyObject.UpdateBindingTargets();
 
-                    DesignTimeLocaleChanged();
+                    LocaleChanged();
                 };
             }
             else
             {
                 dependencyObject.UpdateBindingTargets();
 
-                DesignTimeLocaleChanged();
+                LocaleChanged();
             }
         }
 
@@ -105,12 +101,11 @@ namespace WPFLocales
 
             foreach (var keyValue in _designTimeLocales)
             {
-                DesignTimeLocaleChanged();
+                LocaleChanged();
                 keyValue.Key.UpdateBindingTargets();
             }
         }
 
-        internal static event Action DesignTimeLocaleChanged = () => { };
         private static Dictionary<DependencyObject, string> _designTimeLocales;
         private static readonly Dictionary<DependencyObject, DependencyObject> DesignTimeLocaleParents;
         private static readonly Dictionary<string, Dictionary<string, Dictionary<string, string>>> DesignTimeLocaleDictionary;
@@ -120,7 +115,7 @@ namespace WPFLocales
             var text = "No locale available or design time locale didn't specified";
 
             if (element == null)
-                return text;
+                return "Please reload designer";
 
             DependencyObject localeParent;
             if (!DesignTimeLocaleParents.TryGetValue(element, out localeParent))
@@ -131,7 +126,7 @@ namespace WPFLocales
             }
 
             if (localeParent == null)
-                return text;
+                return "Design time locale didn't specified";
 
             var locale = _designTimeLocales[localeParent];
             var groupKey = key.GetType().Name;
