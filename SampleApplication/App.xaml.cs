@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Localization = WPFLocales.Localization;
+using WPFLocales;
 
 namespace SampleApplication
 {
@@ -13,7 +13,7 @@ namespace SampleApplication
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Localization.Initialize(new DirectoryInfo("Locales"), "RU");
+            Locales.Initialize(new DirectoryInfo("Locales"), "RU");
             base.OnStartup(e);
         }
     }

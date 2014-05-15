@@ -60,7 +60,7 @@ namespace WPFLocales.View
             {
                 _targetProperty = targetProperty;
 
-                Localization.LocaleChanged += OnLocalizationLocaleChanged;
+                Locales.CurrentLocaleChanged += OnLocalizationCurrentLocaleChanged;
             }
 
             var text = _key == null ? "Key not set yet" : GetTextByKey();
@@ -68,7 +68,7 @@ namespace WPFLocales.View
             return text;
         }
 
-        private void OnLocalizationLocaleChanged()
+        private void OnLocalizationCurrentLocaleChanged()
         {
             UpdateTarget();
         }
@@ -80,7 +80,7 @@ namespace WPFLocales.View
 
             foreach (var targetObject in _targetObjects)
             {
-                var text = _isInDesignMode ? Localization.GetTextByKey(targetObject, _key) : Localization.GetTextByKey(_key);
+                var text = _isInDesignMode ? Locales.GetTextByLocaleKey(targetObject, _key) : Locales.GetTextByLocaleKey(_key);
 
                 targetObject.SetValue(_targetProperty, text);
             }
@@ -88,7 +88,7 @@ namespace WPFLocales.View
 
         private string GetTextByKey()
         {
-            return _isInDesignMode ? Localization.GetTextByKey(_targetObjects.First(), _key) : Localization.GetTextByKey(_key);
+            return _isInDesignMode ? Locales.GetTextByLocaleKey(_targetObjects.First(), _key) : Locales.GetTextByLocaleKey(_key);
         }
     }
 }

@@ -46,11 +46,11 @@ namespace WPFLocales.View
         protected string GetLocalizedString(Enum key, bool withFormating = true)
         {
            
-            var text = _isInDesignMode ? Localization.GetTextByKey(ParentDependencyObject, key) : Localization.GetTextByKey(key);
+            var text = _isInDesignMode ? Locales.GetTextByLocaleKey(ParentDependencyObject, key) : Locales.GetTextByLocaleKey(key);
 
             if (withFormating && FormatKey != null)
             {
-                var format = _isInDesignMode ? Localization.GetTextByKey(ParentDependencyObject, FormatKey) : Localization.GetTextByKey(FormatKey);
+                var format = _isInDesignMode ? Locales.GetTextByLocaleKey(ParentDependencyObject, FormatKey) : Locales.GetTextByLocaleKey(FormatKey);
                 text = string.Format(format, text);
 
                 using (var writer = new StreamWriter("log.log", true))
