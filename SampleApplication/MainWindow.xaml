@@ -4,7 +4,7 @@
         xmlns:view="clr-namespace:WPFLocales.View;assembly=WPFLocales"
         xmlns:sampleApplication="clr-namespace:SampleApplication"
         xmlns:wpfLocales="clr-namespace:WPFLocales;assembly=WPFLocales"
-        Title="MainWindow" Width="300" Height="180"
+        Title="MainWindow" Width="300" Height="200"
         
         wpfLocales:Localization.DesignTimeLocalesPath="SampleApplication/Locales"
         wpfLocales:Localization.DesignTimeLocale="RU"
@@ -24,6 +24,7 @@
                     </Binding>
                 </Label.Content>
             </Label>
+            <Label Content="{Binding State, Converter={view:Formatter {x:Static sampleApplication:LocaleKeys+SampleApplication.StateLabelContentFormat}}}"/>
             
             <Button Content="{view:LocalizableText Key={x:Static sampleApplication:LocaleKeys+SampleApplication.ChangeStateButtonContent}}" Command="{Binding ChangeStateCommand}"/>
             <ListView ItemsSource="{Binding States}">

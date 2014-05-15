@@ -47,6 +47,7 @@
     <Compile Include="Model\ILocaleGroup.cs" />
     <Compile Include="Model\ILocaleItem.cs" />
     <Compile Include="Utils\BindingExtensions.cs" />
+    <Compile Include="View\Formatter.cs" />
     <Compile Include="View\LocalizableConverter.cs" />
     <Compile Include="View\LocalizableText.cs" />
     <Compile Include="Localization.cs" />
