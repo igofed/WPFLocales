@@ -52,28 +52,21 @@ namespace WPFLocales.View
             if (targetObject == null || targetProperty == null)
                 throw new NotSupportedException("LocalizableText supported only for dependency properties");
 
+            _targetProperty = targetProperty;
             if (!_targetObjects.Contains(targetObject))
             {
                 _targetObjects.Add(targetObject);
             }
-            if (_targetObjects.Count == 1)
-            {
-                _targetProperty = targetProperty;
 
+            if(_isInDesignMode)
+                Locales.RegisterLocalizableTextForElement(this, targetObject);
+            else if(_targetObjects.Count == 1)
                 Locales.CurrentLocaleChanged += OnLocalizationCurrentLocaleChanged;
-            }
-
-            var text = _key == null ? "Key not set yet" : GetTextByKey();
-
-            return text;
+            
+            return _key == null ? "Key not set yet" : GetTextByKey();
         }
 
-        private void OnLocalizationCurrentLocaleChanged()
-        {
-            UpdateTarget();
-        }
-
-        private void UpdateTarget()
+        internal void UpdateTarget()
         {
             if (_key == null || _targetProperty == null)
                 return;
@@ -84,6 +77,11 @@ namespace WPFLocales.View
 
                 targetObject.SetValue(_targetProperty, text);
             }
+        }
+
+        private void OnLocalizationCurrentLocaleChanged()
+        {
+            UpdateTarget();
         }
 
         private string GetTextByKey()

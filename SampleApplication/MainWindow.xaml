@@ -4,11 +4,11 @@
         xmlns:sampleApplication="clr-namespace:SampleApplication"
         xmlns:lk="clr-namespace:SampleApplication"
         xmlns:l="clr-namespace:WPFLocales.View;assembly=WPFLocales"
-        xmlns:wpfLocales="clr-namespace:WPFLocales;assembly=WPFLocales"
+        xmlns:locales="clr-namespace:WPFLocales;assembly=WPFLocales"
         Title="MainWindow" Width="300" Height="200"
         
-        wpfLocales:Locales.DesignTimeLocalesPath="SampleApplication/Locales"
-        wpfLocales:Locales.DesignTimeLocale="RU"
+        locales:Locales.DesignTimeLocalesPath="SampleApplication/Locales"
+        locales:Locales.DesignTimeLocale="RU"
         
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"

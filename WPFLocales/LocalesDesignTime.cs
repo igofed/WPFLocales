@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using WPFLocales.Utils;
+using WPFLocales.View;
 using WPFLocales.Xml;
 
 namespace WPFLocales
@@ -48,9 +51,8 @@ namespace WPFLocales
                 //if current control is loaded, then binding's converters's parents already setted
                 //and we need only trigger bindings to update their targets
                 dependencyObject.UpdateBindingTargets();
-
-                //todo: remove it
-                CurrentLocaleChanged();
+                //udpate all localized texts
+                UpdateLocalizedTextsForControl(parentControl);
             }
         }
         private static void OnControlLoaded(object sender, RoutedEventArgs e)
@@ -65,9 +67,8 @@ namespace WPFLocales
             control.UpdateBindingConverterParents();
             //update binding's targets for requesting new values
             control.UpdateBindingTargets();
-
-            //todo: remove it
-            CurrentLocaleChanged();   
+            //udpate all localized texts
+            UpdateLocalizedTextsForControl(control);
         }
 
         /// <summary>
@@ -121,17 +122,18 @@ namespace WPFLocales
             foreach (var keyValue in DesignTimeLocales)
             {
                 keyValue.Key.UpdateBindingTargets();
-                //todo: remove it
-                CurrentLocaleChanged();
+
+                UpdateLocalizedTextsForControl(keyValue.Key);
             }
         }
 
-        //DesignTime
         private static readonly Dictionary<Control, string> DesignTimeLocales = new Dictionary<Control, string>();
         private static readonly Dictionary<DependencyObject, Control> DesignTimeLocaleParents = new Dictionary<DependencyObject, Control>();
         private static readonly Dictionary<string, Dictionary<string, Dictionary<string, string>>> DesignTimeLocaleDictionary = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
-
-        //returns localized text for element and lcoalization key
+        private static readonly Dictionary<Control, List<LocalizableText>> ControlsTexts = new Dictionary<Control, List<LocalizableText>>();
+        private static readonly Dictionary<DependencyObject, LocalizableText> WaitingForRegister = new Dictionary<DependencyObject, LocalizableText>();
+        
+        //returns localized text for element and localization key
         internal static string GetTextByLocaleKey(DependencyObject element, Enum localicationKey)
         {
             //can occur for Converter which FormatKey was changed
@@ -171,6 +173,57 @@ namespace WPFLocales
                 }
             }
             return item;
+        }
+
+        //registers LocalizableText for future or adds it to Waiting collection
+        //waiting collection occurs when parent is not know at time of calling this
+        internal static void RegisterLocalizableTextForElement(LocalizableText localizableText, DependencyObject element)
+        {
+            var parent = FindDesignTimeLocaleParent(element);
+            if (parent != null)
+            {
+                if (!ControlsTexts.ContainsKey(parent))
+                    ControlsTexts[parent] = new List<LocalizableText>();
+                ControlsTexts[parent].Add(localizableText);
+            }
+            else
+            {
+                WaitingForRegister.Add(element, localizableText);
+            }
+        }
+
+        //registers all waiting controls 
+        private static void RegisterWaitingForRegister()
+        {
+            if (!WaitingForRegister.Any())
+                return;
+
+            var waiting = WaitingForRegister.ToList();
+            foreach (var keyValuePair in waiting)
+            {
+                var parent = FindDesignTimeLocaleParent(keyValuePair.Key);
+                if (parent == null) continue;
+
+                if (!ControlsTexts.ContainsKey(parent))
+                    ControlsTexts[parent] = new List<LocalizableText>();
+                ControlsTexts[parent].Add(keyValuePair.Value);
+                WaitingForRegister.Remove(keyValuePair.Key);
+            }
+        }
+
+        //update all registered localizedtext with registering waiting before
+        private static void UpdateLocalizedTextsForControl(Control control)
+        {
+            RegisterWaitingForRegister();
+
+            List<LocalizableText> texts;
+
+            if (!ControlsTexts.TryGetValue(control, out texts)) return;
+
+            foreach (var localizableText in texts)
+            {
+                localizableText.UpdateTarget();
+            }
         }
 
         //finds parent control wich locale specified
