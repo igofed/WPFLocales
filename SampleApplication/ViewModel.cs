@@ -28,7 +28,10 @@ namespace SampleApplication
 
         public ViewModel()
         {
-            Locales = new ObservableCollection<string>(WPFLocales.Locales.AvailableLocales);
+            if (WPFLocales.Locales.AvailableLocales != null)
+            {
+                Locales = new ObservableCollection<string>(WPFLocales.Locales.AvailableLocales);
+            }
             States = new ObservableCollection<State>(new[] { State.Error, State.Ok });
             ChangeStateCommand = new DelegateCommand(() =>
             {
