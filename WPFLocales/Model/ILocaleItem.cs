@@ -2,8 +2,8 @@
 {
     public interface ILocaleItem
     {
-        string Key { get; set; }
-        string Value { get; set; }
-        string Comment { get; set; }
+        string Key { get; }
+        string Value { get; }
+        string Comment { get; }
     }
 }

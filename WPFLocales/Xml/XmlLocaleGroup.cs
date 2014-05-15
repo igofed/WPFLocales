@@ -12,16 +12,11 @@ namespace WPFLocales.Xml
         [XmlElement("Item")]
         public List<XmlLocaleItem> Items { get; set; }
 
-
         List<ILocaleItem> ILocaleGroup.Items
         {
             get
             {
                 return Items.Cast<ILocaleItem>().ToList();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
             }
         }
     }

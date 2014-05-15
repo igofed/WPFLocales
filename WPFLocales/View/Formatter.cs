@@ -5,9 +5,9 @@ namespace WPFLocales.View
 {
     public class Formatter : LocalizableConverter
     {
-        public Formatter(Enum format)
+        public Formatter(Enum formatKey)
         {
-            FormatKey = format;
+            FormatKey = formatKey;
         }
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -18,7 +18,7 @@ namespace WPFLocales.View
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException("Formatter doesn't support back convetation");
         }
     }
 }

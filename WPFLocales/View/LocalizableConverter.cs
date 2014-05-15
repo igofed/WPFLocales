@@ -45,20 +45,12 @@ namespace WPFLocales.View
         /// <returns></returns>
         protected string GetLocalizedString(Enum key, bool withFormating = true)
         {
-           
             var text = _isInDesignMode ? Locales.GetTextByLocaleKey(ParentDependencyObject, key) : Locales.GetTextByLocaleKey(key);
 
             if (withFormating && FormatKey != null)
             {
                 var format = _isInDesignMode ? Locales.GetTextByLocaleKey(ParentDependencyObject, FormatKey) : Locales.GetTextByLocaleKey(FormatKey);
                 text = string.Format(format, text);
-
-                using (var writer = new StreamWriter("log.log", true))
-                {
-                    writer.Write("Parent: " + (ParentDependencyObject == null ? "NULL" : ParentDependencyObject.ToString()));
-                    writer.Write("; Text: " + text);
-                    writer.WriteLine();
-                }
             }
 
             return text;

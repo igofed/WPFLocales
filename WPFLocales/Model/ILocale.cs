@@ -6,6 +6,6 @@ namespace WPFLocales.Model
     {
         string Key { get; set; }
 
-        List<ILocaleGroup> Groups { get; set; }
+        List<ILocaleGroup> Groups { get; }
     }
 }

@@ -11,6 +11,9 @@ namespace WPFLocales.Xml
         [XmlAttribute]
         public string Key { get; set; }
 
+        [XmlAttribute]
+        public string Title { get; set; }
+
         [XmlElement("Group")]
         public List<XmlLocaleGroup> Groups { get; set; }
 
@@ -19,10 +22,6 @@ namespace WPFLocales.Xml
             get
             {
                 return Groups.Cast<ILocaleGroup>().ToList();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
             }
         }
     }

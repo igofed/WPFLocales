@@ -4,8 +4,8 @@ namespace WPFLocales.Model
 {
     public interface ILocaleGroup
     {
-        string Key { get; set; }
+        string Key { get; }
 
-        List<ILocaleItem> Items { get; set; }
+        List<ILocaleItem> Items { get; }
     }
 }
