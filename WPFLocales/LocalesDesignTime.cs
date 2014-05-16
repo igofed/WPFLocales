@@ -94,8 +94,8 @@ namespace WPFLocales
 
             var locales = new List<string>();
 
-            //rading all locales from XMLs
-            var files = Directory.GetFiles(path);
+            //reading all locales from XMLs
+            var files = Directory.GetFiles(path).Where(f => f.EndsWith(".locale")); ;
             foreach (var file in files)
             {
                 using (var stream = new FileStream(file, FileMode.Open))
