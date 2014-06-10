@@ -28,7 +28,7 @@ namespace WPFLocales
             return (string)element.GetValue(DesignTimeLocaleProperty);
         }
         private static void OnDesignTimeLocalePropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {  
+        {
             if (!DesignerProperties.GetIsInDesignMode(dependencyObject))
                 return;
 
@@ -43,7 +43,7 @@ namespace WPFLocales
             //on loading process we have no access to full XAML tree, so need to wait for Loaded, when tree builded
             if (!parentControl.IsLoaded)
             {
-                parentControl.Loaded += OnControlLoaded; 
+                parentControl.Loaded += OnControlLoaded;
             }
             else
             {
@@ -73,14 +73,14 @@ namespace WPFLocales
         /// <summary>
         /// Attached property for design time locale's path for current control. .locale files should be accessible by this path
         /// </summary>
-        public static readonly DependencyProperty DesignTimeLocalesPathProperty = DependencyProperty.RegisterAttached("DesignTimeLocalesPath", typeof(string), typeof(Locales), new PropertyMetadata(null, OnDesignTimeLocalesPathPropertyChanged));
-        public static void SetDesignTimeLocalesPath(Control element, string value)
+        public static readonly DependencyProperty DesignTimeLocalesPathProperty = DependencyProperty.RegisterAttached("DesignTimeLocalesPath", typeof(Uri), typeof(Locales), new PropertyMetadata(default(Uri), OnDesignTimeLocalesPathPropertyChanged));
+        public static void SetDesignTimeLocalesPath(Control element, Uri value)
         {
             element.SetValue(DesignTimeLocalesPathProperty, value);
         }
-        public static string GetDesignTimeLocalesPath(Control element)
+        public static Uri GetDesignTimeLocalesPath(Control element)
         {
-            return (string)element.GetValue(DesignTimeLocalesPathProperty);
+            return (Uri)element.GetValue(DesignTimeLocalesPathProperty);
         }
         private static void OnDesignTimeLocalesPathPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
@@ -90,12 +90,11 @@ namespace WPFLocales
             if (dependencyPropertyChangedEventArgs.NewValue == null)
                 return;
 
-            var path = (string)dependencyPropertyChangedEventArgs.NewValue;
-
+            var path = (Uri)dependencyPropertyChangedEventArgs.NewValue;
             var locales = new List<string>();
 
             //reading all locales from XMLs
-            var files = Directory.GetFiles(path).Where(f => f.EndsWith(".locale")); ;
+            var files = Directory.GetFiles(path.OriginalString).Where(f => f.EndsWith(".locale"));
             foreach (var file in files)
             {
                 using (var stream = new FileStream(file, FileMode.Open))
@@ -131,7 +130,7 @@ namespace WPFLocales
         private static readonly Dictionary<string, Dictionary<string, Dictionary<string, string>>> DesignTimeLocaleDictionary = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
         private static readonly Dictionary<Control, List<LocalizableText>> ControlsTexts = new Dictionary<Control, List<LocalizableText>>();
         private static readonly Dictionary<DependencyObject, LocalizableText> WaitingForRegister = new Dictionary<DependencyObject, LocalizableText>();
-        
+
         //returns localized text for element and localization key
         internal static string GetTextByLocaleKey(DependencyObject element, Enum localicationKey)
         {
@@ -231,7 +230,7 @@ namespace WPFLocales
             var currentElement = element;
             do
             {
-                if(currentElement is Control && DesignTimeLocales.ContainsKey(currentElement as Control))
+                if (currentElement is Control && DesignTimeLocales.ContainsKey(currentElement as Control))
                 {
                     return currentElement as Control;
                 }
