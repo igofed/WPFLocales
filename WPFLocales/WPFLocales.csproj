@@ -43,6 +43,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContainLocalesAttribute.cs" />
+    <Compile Include="Locale.cs" />
     <Compile Include="Exceptions\LocalizationKeyNotFoundException.cs" />
     <Compile Include="LocalesDesignTime.cs" />
     <Compile Include="Model\ILocale.cs" />

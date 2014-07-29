@@ -93,6 +93,9 @@ namespace WPFLocales
             var path = (Uri)dependencyPropertyChangedEventArgs.NewValue;
             var locales = new List<string>();
 
+            //collection of locales for each parent control
+            DesignTimeLocaleDictionary[dependencyObject] = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
+
             //reading all locales from XMLs
             var files = Directory.GetFiles(path.OriginalString).Where(f => f.EndsWith(".locale"));
             foreach (var file in files)
@@ -104,13 +107,13 @@ namespace WPFLocales
                     locales.Add(locale.Key);
 
                     //filling locales fictionaries
-                    DesignTimeLocaleDictionary[locale.Key] = new Dictionary<string, Dictionary<string, string>>();
+                    DesignTimeLocaleDictionary[dependencyObject][locale.Key] = new Dictionary<string, Dictionary<string, string>>();
                     foreach (var group in locale.Groups)
                     {
-                        DesignTimeLocaleDictionary[locale.Key][group.Key] = new Dictionary<string, string>();
+                        DesignTimeLocaleDictionary[dependencyObject][locale.Key][group.Key] = new Dictionary<string, string>();
                         foreach (var item in group.Items)
                         {
-                            DesignTimeLocaleDictionary[locale.Key][group.Key][item.Key] = item.Value;
+                            DesignTimeLocaleDictionary[dependencyObject][locale.Key][group.Key][item.Key] = item.Value;
                         }
                     }
                 }
@@ -127,7 +130,7 @@ namespace WPFLocales
 
         private static readonly Dictionary<Control, string> DesignTimeLocales = new Dictionary<Control, string>();
         private static readonly Dictionary<DependencyObject, Control> DesignTimeLocaleParents = new Dictionary<DependencyObject, Control>();
-        private static readonly Dictionary<string, Dictionary<string, Dictionary<string, string>>> DesignTimeLocaleDictionary = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
+        private static readonly Dictionary<DependencyObject, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> DesignTimeLocaleDictionary = new Dictionary<DependencyObject, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>();
         private static readonly Dictionary<Control, List<LocalizableText>> ControlsTexts = new Dictionary<Control, List<LocalizableText>>();
         private static readonly Dictionary<DependencyObject, LocalizableText> WaitingForRegister = new Dictionary<DependencyObject, LocalizableText>();
 
@@ -139,7 +142,7 @@ namespace WPFLocales
             if (element == null)
                 return "Please reload designer";
 
-            //looking for elemtn's parent with setted locale
+            //looking for element's parent with setted locale
             Control localeParent;
             if (!DesignTimeLocaleParents.TryGetValue(element, out localeParent))
             {
@@ -158,9 +161,9 @@ namespace WPFLocales
 
             //looking for item in dictionary
             var item = "No locale available or design time locale didn't specified";
-            if (DesignTimeLocaleDictionary.ContainsKey(locale))
+            if (DesignTimeLocaleDictionary[localeParent].ContainsKey(locale))
             {
-                var groups = DesignTimeLocaleDictionary[locale];
+                var groups = DesignTimeLocaleDictionary[localeParent][locale];
                 if (groups.ContainsKey(groupKey))
                 {
                     var fields = groups[groupKey];
