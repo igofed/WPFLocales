@@ -38,14 +38,14 @@ namespace PS.Utils
             return solution.GetProjects().Select(LocalizationAssemblyInfo.FromProject).FirstOrDefault(info => info != null);
         }
 
-        public static void AddFile(this Project project, ProjectItem parent, string fileName, string content)
+        public static ProjectItem AddFile(this Project project, ProjectItem parent, string fileName, string content)
         {
             var projectFileInfo = new FileInfo(project.FullName);
             var directory = projectFileInfo.Directory;
             var assemblyFileInfo = Path.Combine(directory.FullName, parent.Name, fileName);
             File.WriteAllText(assemblyFileInfo, content);
 
-            parent.ProjectItems.AddFromFile(assemblyFileInfo);
+            return parent.ProjectItems.AddFromFile(assemblyFileInfo);
         }
 
         public static ProjectItem AddDirectory(this Project project, string directoryName)

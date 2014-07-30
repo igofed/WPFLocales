@@ -1,6 +1,7 @@
-﻿using System;
-using EnvDTE;
+﻿using EnvDTE;
+using PS.Templates;
 using PS.Utils;
+using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 
@@ -11,6 +12,9 @@ namespace PS
     {
         [Parameter(Mandatory = true, Position = 0, HelpMessage = "Key of locale to add")]
         public string Key { get; set; }
+
+        [Parameter(Mandatory = true, Position = 1, HelpMessage = "Title of locale to add")]
+        public string Title { get; set; }
 
         protected override void ProcessRecord()
         {
@@ -38,8 +42,26 @@ namespace PS
                 return;
             }
 
-            //todo: generate ok file with ok content
-            localizationInfo.Project.AddFile(localizationInfo.LocalesDirectory, localeFileName, "");
+            var localeFileText = GenerateLocaleFileText(Key, Title);
+            var localeFile = localizationInfo.Project.AddFile(localizationInfo.LocalesDirectory, localeFileName, localeFileText);
+            
+            foreach (var VARIABLE in localeFile.Properties)
+            {
+                
+                var prop = (Property) VARIABLE;
+                Host.UI.WriteLine(string.Format("{0}->{1}", prop.Name, prop.Value));
+                
+            }
+        }
+
+        private string GenerateLocaleFileText(string key, string locale)
+        {
+            var localeTemplate = new LocaleTemplate();
+            localeTemplate.Session = new Dictionary<string, object>();
+            localeTemplate.Session["Key"] = key;
+            localeTemplate.Session["Title"] = Title;
+            localeTemplate.Initialize();
+            return localeTemplate.TransformText();
         }
     }
 }

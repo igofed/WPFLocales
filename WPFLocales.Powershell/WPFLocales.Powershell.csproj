@@ -59,6 +59,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Templates\LocaleTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocaleTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\LocalizationAssemblyInfoTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -81,6 +86,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Templates\LocaleTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LocaleTemplate.cs</LastGenOutput>
+    </None>
     <None Include="Templates\LocalizationAssemblyInfoTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LocalizationAssemblyInfoTemplate.cs</LastGenOutput>
