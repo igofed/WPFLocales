@@ -7,9 +7,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml.Serialization;
+using WpfLocales.Model.Xml;
 using WPFLocales.Utils;
 using WPFLocales.View;
-using WPFLocales.Xml;
 
 namespace WPFLocales
 {

@@ -1,28 +1,22 @@
-﻿using EnvDTE;
-using PS.Utils;
-using System.Linq;
-using System.Management.Automation;
+﻿using System.Management.Automation;
 
-namespace PS
+namespace WPFLocales.Powershell
 {
     [Cmdlet(VerbsCommon.Get, "Locales")]
-    public class GetLocales : PSCmdlet
+    public class GetLocales : LocalizationCmdlet
     {
         protected override void ProcessRecord()
         {
-            var dte = (DTE)GetVariableValue("DTE");
-
-            var localizationInfo = dte.Solution.GetLocalizationAssemblyInfo();
-            if (localizationInfo == null)
+            if (_localizationInfo == null)
             {
                 Host.UI.WriteErrorLine("No localization project found. First do Enable-Localization and add some locales");
                 return;
             }
 
-            foreach (var locale in localizationInfo.LocalesDirectory.GetProjectItemItems().Where(i=>i.Name.EndsWith(".locale")))
+            foreach (var locale in GetAlLocales())
             {
-                Host.UI.WriteLine(locale.Name);
-            }  
+                WriteLine(string.Format("{0} -> {1} -> {2}", locale.LocaleItem.Name, locale.Locale.Key, locale.Locale.Title));
+            }
         }
     }
 }

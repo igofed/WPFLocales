@@ -16,7 +16,7 @@
 // </auto-generated>
 // ------------------------------------------------------------------------------
 
-using WpfLocales;
+using WPFLocales;
 
 [assembly: LocalizationAssembly]
 [assembly: LocalizationDirectory("<#= LocalizationDirectoryName #>")]

@@ -54,6 +54,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Class1.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="Localization\DesignTime\RULocale.cs" />
     <Compile Include="StateToTextConverter.cs" />
@@ -107,10 +108,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WpfLocales.Model\WPFLocales.Model.csproj">
+      <Project>{a18f2aeb-162f-4ce2-a710-bdfd259909ca}</Project>
+      <Name>WPFLocales.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WPFLocales.Powershell\WPFLocales.Powershell.csproj">
+      <Project>{E38A5761-B723-469A-B179-1875FDFFD917}</Project>
+      <Name>WPFLocales.Powershell</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WPFLocales\WPFLocales.csproj">
       <Project>{5f84b180-22a9-4c72-8e3b-a0c5d72b0868}</Project>
       <Name>WPFLocales</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,67 +1,37 @@
-﻿using EnvDTE;
-using PS.Templates;
-using PS.Utils;
-using System.Collections.Generic;
-using System.Linq;
-using System.Management.Automation;
+﻿using System.Management.Automation;
 
-namespace PS
+namespace WPFLocales.Powershell
 {
     [Cmdlet(VerbsCommon.Add, "Locale")]
-    public class AddLocale : PSCmdlet
+    public class AddLocale : LocalizationCmdlet
     {
-        [Parameter(Mandatory = true, Position = 0, HelpMessage = "Key of locale to add")]
+        [Parameter(Mandatory = true, HelpMessage = "Key of locale to add")]
         public string Key { get; set; }
 
-        [Parameter(Mandatory = true, Position = 1, HelpMessage = "Title of locale to add")]
+        [Parameter(Mandatory = false, HelpMessage = "Title of locale to add")]
         public string Title { get; set; }
 
         protected override void ProcessRecord()
         {
-            var dte = (DTE)GetVariableValue("DTE");
-
-            var localizationInfo = dte.Solution.GetLocalizationAssemblyInfo();
-            if (localizationInfo == null)
+            //check for localization enabled
+            if (_localizationInfo == null)
             {
-                Host.UI.WriteErrorLine("No localization project found. First do Enable-Localization");
+                WriteErrorLine("No localization project found. First do Enable-Localization");
                 return;
             }
-            if (localizationInfo.LocalesDirectory == null || localizationInfo.LocalizationDirectory == null)
+            if (_localizationInfo.LocalesDirectory == null || _localizationInfo.LocalizationDirectory == null || _localizationInfo.LocalizationDesignDataDirectory == null)
             {
-                Host.UI.WriteErrorLine("Something wrong with localization settings");
-                return;
-            }
-
-
-            var localeFileName = string.Format("{0}.locale", Key);
-
-            var existingLocale = localizationInfo.LocalesDirectory.GetProjectItemItems().FirstOrDefault(i => i.Name == localeFileName);
-            if (existingLocale != null)
-            {
-                Host.UI.WriteErrorLine("Locale with such key already exists");
+                WriteErrorLine("Something wrong with localization settings");
                 return;
             }
 
-            var localeFileText = GenerateLocaleFileText(Key, Title);
-            var localeFile = localizationInfo.Project.AddFile(localizationInfo.LocalesDirectory, localeFileName, localeFileText);
-            
-            foreach (var VARIABLE in localeFile.Properties)
+            if (!IsLocaleKeyValid(Key))
             {
-                
-                var prop = (Property) VARIABLE;
-                Host.UI.WriteLine(string.Format("{0}->{1}", prop.Name, prop.Value));
-                
+                WriteErrorLine("Locale key shoud has length of minimum 2 and contains only chars");
+                return;
             }
-        }
 
-        private string GenerateLocaleFileText(string key, string locale)
-        {
-            var localeTemplate = new LocaleTemplate();
-            localeTemplate.Session = new Dictionary<string, object>();
-            localeTemplate.Session["Key"] = key;
-            localeTemplate.Session["Title"] = Title;
-            localeTemplate.Initialize();
-            return localeTemplate.TransformText();
+            AddLocale(Key, Title);
         }
     }
 }

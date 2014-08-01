@@ -18,9 +18,9 @@ namespace WPFLocales.Powershell.Templates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocalizationAssemblyInfoTemplate.tt"
+    #line 1 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public partial class LocalizationAssemblyInfoTemplate : LocalizationAssemblyInfoTemplateBase
+    public partial class DesignTimeLocaleTemplate : DesignTimeLocaleTemplateBase
     {
 #line hidden
         /// <summary>
@@ -39,52 +39,188 @@ namespace WPFLocales.Powershell.Templates
 // </auto-generated>
 // ------------------------------------------------------------------------------
 
-using WPFLocales;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using WPFLocales.DesignTime;
 
-[assembly: LocalizationAssembly]
-[assembly: LocalizationDirectory(""");
+namespace ");
             
-            #line 22 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocalizationAssemblyInfoTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(LocalizationDirectoryName));
-            
-            #line default
-            #line hidden
-            this.Write("\")]\r\n[assembly: LocalesDirectory(\"");
-            
-            #line 23 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocalizationAssemblyInfoTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(LocalesDirectoryName));
+            #line 25 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(NamespaceName));
             
             #line default
             #line hidden
-            this.Write("\")]");
+            this.Write("\r\n{\r\n\t/// <summary>\r\n    /// Design time locale: ");
+            
+            #line 28 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Title));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n    /// </summary>\r\n\tpublic class ");
+            
+            #line 30 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Key));
+            
+            #line default
+            #line hidden
+            this.Write("DesignTimeLocale : DesignTimeLocale\r\n\t{\r\n\t\tpublic ");
+            
+            #line 32 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Key));
+            
+            #line default
+            #line hidden
+            this.Write("DesignTimeLocale() : base(\"");
+            
+            #line 32 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Key));
+            
+            #line default
+            #line hidden
+            this.Write("\", \"");
+            
+            #line 32 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Title));
+            
+            #line default
+            #line hidden
+            this.Write("\")\r\n\t\t{\r\n\t\t\t");
+            
+            #line 34 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+ 
+			if(Locale != null) 
+			{
+			
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\tvar values = new Dictionary<string, IReadOnlyDictionary<string,string>>\r\n\t\t\t\t" +
+                    "{\r\n\t\t\t\t");
+            
+            #line 40 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+ 
+				foreach(var group in Locale.Groups) 
+				{
+				
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t\t{\r\n\t\t\t\t\t\t\"");
+            
+            #line 45 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(group.Key));
+            
+            #line default
+            #line hidden
+            this.Write("\", \r\n\t\t\t\t\t\tnew ReadOnlyDictionary<string, string>(new Dictionary<string, string>\r" +
+                    "\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t");
+            
+            #line 48 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+
+						foreach(var item in group.Items)
+						{
+						
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t\t\t{ \"");
+            
+            #line 52 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key));
+            
+            #line default
+            #line hidden
+            this.Write("\", \"");
+            
+            #line 52 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Value));
+            
+            #line default
+            #line hidden
+            this.Write("\" },\r\n\t\t\t\t\t\t");
+            
+            #line 53 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+
+						}
+						
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t\t\t})\r\n\t\t\t\t\t},\r\n\t\t\t\t");
+            
+            #line 58 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+	
+				}
+				
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t};\r\n\t\t\t\tValues = new ReadOnlyDictionary<string, IReadOnlyDictionary<string, s" +
+                    "tring>>(values);\r\n\t\t\t");
+            
+            #line 63 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+ 
+			} 
+			
+            
+            #line default
+            #line hidden
+            this.Write("\t\t}\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 1 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocalizationAssemblyInfoTemplate.tt"
+        #line 1 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
 
-private string _LocalizationDirectoryNameField;
+private string _KeyField;
 
 /// <summary>
-/// Access the LocalizationDirectoryName parameter of the template.
+/// Access the Key parameter of the template.
 /// </summary>
-private string LocalizationDirectoryName
+private string Key
 {
     get
     {
-        return this._LocalizationDirectoryNameField;
+        return this._KeyField;
     }
 }
 
-private string _LocalesDirectoryNameField;
+private string _TitleField;
 
 /// <summary>
-/// Access the LocalesDirectoryName parameter of the template.
+/// Access the Title parameter of the template.
 /// </summary>
-private string LocalesDirectoryName
+private string Title
 {
     get
     {
-        return this._LocalesDirectoryNameField;
+        return this._TitleField;
+    }
+}
+
+private string _NamespaceNameField;
+
+/// <summary>
+/// Access the NamespaceName parameter of the template.
+/// </summary>
+private string NamespaceName
+{
+    get
+    {
+        return this._NamespaceNameField;
+    }
+}
+
+private global::WPFLocales.Model.ILocale _LocaleField;
+
+/// <summary>
+/// Access the Locale parameter of the template.
+/// </summary>
+private global::WPFLocales.Model.ILocale Locale
+{
+    get
+    {
+        return this._LocaleField;
     }
 }
 
@@ -96,32 +232,60 @@ public virtual void Initialize()
 {
     if ((this.Errors.HasErrors == false))
     {
-bool LocalizationDirectoryNameValueAcquired = false;
-if (this.Session.ContainsKey("LocalizationDirectoryName"))
+bool KeyValueAcquired = false;
+if (this.Session.ContainsKey("Key"))
 {
-    this._LocalizationDirectoryNameField = ((string)(this.Session["LocalizationDirectoryName"]));
-    LocalizationDirectoryNameValueAcquired = true;
+    this._KeyField = ((string)(this.Session["Key"]));
+    KeyValueAcquired = true;
 }
-if ((LocalizationDirectoryNameValueAcquired == false))
+if ((KeyValueAcquired == false))
 {
-    object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("LocalizationDirectoryName");
+    object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("Key");
     if ((data != null))
     {
-        this._LocalizationDirectoryNameField = ((string)(data));
+        this._KeyField = ((string)(data));
     }
 }
-bool LocalesDirectoryNameValueAcquired = false;
-if (this.Session.ContainsKey("LocalesDirectoryName"))
+bool TitleValueAcquired = false;
+if (this.Session.ContainsKey("Title"))
 {
-    this._LocalesDirectoryNameField = ((string)(this.Session["LocalesDirectoryName"]));
-    LocalesDirectoryNameValueAcquired = true;
+    this._TitleField = ((string)(this.Session["Title"]));
+    TitleValueAcquired = true;
 }
-if ((LocalesDirectoryNameValueAcquired == false))
+if ((TitleValueAcquired == false))
 {
-    object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("LocalesDirectoryName");
+    object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("Title");
     if ((data != null))
     {
-        this._LocalesDirectoryNameField = ((string)(data));
+        this._TitleField = ((string)(data));
+    }
+}
+bool NamespaceNameValueAcquired = false;
+if (this.Session.ContainsKey("NamespaceName"))
+{
+    this._NamespaceNameField = ((string)(this.Session["NamespaceName"]));
+    NamespaceNameValueAcquired = true;
+}
+if ((NamespaceNameValueAcquired == false))
+{
+    object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("NamespaceName");
+    if ((data != null))
+    {
+        this._NamespaceNameField = ((string)(data));
+    }
+}
+bool LocaleValueAcquired = false;
+if (this.Session.ContainsKey("Locale"))
+{
+    this._LocaleField = ((global::WPFLocales.Model.ILocale)(this.Session["Locale"]));
+    LocaleValueAcquired = true;
+}
+if ((LocaleValueAcquired == false))
+{
+    object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("Locale");
+    if ((data != null))
+    {
+        this._LocaleField = ((global::WPFLocales.Model.ILocale)(data));
     }
 }
 
@@ -142,7 +306,7 @@ if ((LocalesDirectoryNameValueAcquired == false))
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public class LocalizationAssemblyInfoTemplateBase
+    public class DesignTimeLocaleTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

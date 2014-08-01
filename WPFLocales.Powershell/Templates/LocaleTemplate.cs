@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace PS.Templates
+namespace WPFLocales.Powershell.Templates
 {
     using System.Linq;
     using System.Text;
@@ -30,19 +30,33 @@ namespace PS.Templates
         {
             this.Write("<Locale Key=\"");
             
-            #line 8 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+            #line 9 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Key));
             
             #line default
             #line hidden
             this.Write("\" Title=\"");
             
-            #line 8 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+            #line 9 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Title));
             
             #line default
             #line hidden
-            this.Write("\">\r\n\t\r\n</Locale>");
+            this.Write("\" ");
+            
+            #line 9 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+if(Locale==null){
+            
+            #line default
+            #line hidden
+            this.Write("IsDefault=\"true\"");
+            
+            #line 9 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+}
+            
+            #line default
+            #line hidden
+            this.Write(">\r\n\t\r\n</Locale>");
             return this.GenerationEnvironment.ToString();
         }
         
@@ -71,6 +85,19 @@ private string Title
     get
     {
         return this._TitleField;
+    }
+}
+
+private global::WPFLocales.Model.ILocale _LocaleField;
+
+/// <summary>
+/// Access the Locale parameter of the template.
+/// </summary>
+private global::WPFLocales.Model.ILocale Locale
+{
+    get
+    {
+        return this._LocaleField;
     }
 }
 
@@ -108,6 +135,20 @@ if ((TitleValueAcquired == false))
     if ((data != null))
     {
         this._TitleField = ((string)(data));
+    }
+}
+bool LocaleValueAcquired = false;
+if (this.Session.ContainsKey("Locale"))
+{
+    this._LocaleField = ((global::WPFLocales.Model.ILocale)(this.Session["Locale"]));
+    LocaleValueAcquired = true;
+}
+if ((LocaleValueAcquired == false))
+{
+    object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("Locale");
+    if ((data != null))
+    {
+        this._LocaleField = ((global::WPFLocales.Model.ILocale)(data));
     }
 }
 

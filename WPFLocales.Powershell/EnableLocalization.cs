@@ -1,18 +1,21 @@
-﻿using EnvDTE;
-using PS.Properties;
-using PS.Templates;
-using PS.Utils;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Management.Automation;
+using WPFLocales.Powershell.Properties;
+using WPFLocales.Powershell.Utils;
 
-namespace PS
+namespace WPFLocales.Powershell
 {
     [Cmdlet(VerbsLifecycle.Enable, "Localization")]
-    public class EnableLocalization : PSCmdlet
+    public class EnableLocalization : LocalizationCmdlet
     {
-        [Parameter(Mandatory = true, Position = 0, HelpMessage = "Project to store localization data in")]
+        [Parameter(Mandatory = true, HelpMessage = "Project to store localization data in")]
         public string ProjectName { get; set; }
+
+        [Parameter(Mandatory = true, HelpMessage = "Key of application's default locale")]
+        public string DefaultLocaleKey { get; set; }
+
+        [Parameter(Mandatory = true, HelpMessage = "Title of application's default locale")]
+        public string DefaultLocaleTitle { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Directory where localization data will be stored. Localization by default")]
         public string LocalizationDirectory { get; set; }
@@ -23,24 +26,24 @@ namespace PS
 
         protected override void ProcessRecord()
         {
-            var dte = (DTE)GetVariableValue("DTE");
-
-            //all projects in solution
-            var projects = dte.Solution.GetProjects().ToArray();
-
             //test for existing localization project
-            var localizationInfo = dte.Solution.GetLocalizationAssemblyInfo();
-            if (localizationInfo != null)
+            if (_localizationInfo != null)
             {
-                Host.UI.WriteErrorLine(string.Format(@"Solution already contains localization project ""{0}""", localizationInfo.Project.Name));
+                WriteErrorLine(string.Format(@"Solution already contains localization project ""{0}""", _localizationInfo.Project.Name));
                 return;
             }
 
             //test for specified project exists
-            var project = projects.FirstOrDefault(p => p.Name == ProjectName);
+            var project = _dte.Solution.GetProjects().FirstOrDefault(p => p.Name == ProjectName);
             if (project == null)
             {
-                Host.UI.WriteErrorLine(string.Format(@"No project with name ""{0}"" available in solution", ProjectName));
+                WriteErrorLine(string.Format(@"No project with name ""{0}"" available in solution", ProjectName));
+                return;
+            }
+
+            if (!IsLocaleKeyValid(DefaultLocaleKey))
+            {
+                WriteErrorLine("Locale key shoud has length of minimum 2 and contains only chars");
                 return;
             }
 
@@ -54,7 +57,7 @@ namespace PS
 
             if (localizationDirectoryName == localesDirectoryName)
             {
-                Host.UI.WriteErrorLine(string.Format(@"Locales and Localization directories should have different names"));
+                WriteErrorLine(string.Format(@"Locales and Localization directories should have different names"));
                 return;
             }
 
@@ -62,35 +65,27 @@ namespace PS
             project.AddDirectory(localesDirectoryName);
             var localizationDirectory = project.AddDirectory(localizationDirectoryName);
             localizationDirectory.AddDirectory(Resources.DesignTimeDataDirectoryName);
+            WriteLine("Localization and locales directories created");
+
 
             //add localization keys file
-            var localizationKeysFileText = GenerateLocalizationKeysFileText(project, localizationDirectoryName);
-            project.AddFile(localizationDirectory, Resources.LocalizationKeysFileName, localizationKeysFileText);
-                    
+            var localizationKeysFileText = Templates.Templates.GenerateLocalizationKeysFileText(project.GetRootNamespace(), localizationDirectoryName);
+            localizationDirectory.AddFile(Resources.LocalizationKeysFileName, localizationKeysFileText);
+            WriteLine("Localization keys file created");
+
             //add localization assembly file
-            var localizationAssemblyInfoFileText = GenerateLocalizationAssemblyInfoFileText(localesDirectoryName, localizationDirectoryName);
+            var localizationAssemblyInfoFileText = Templates.Templates.GenerateLocalizationAssemblyInfoFileText(localesDirectoryName, localizationDirectoryName);
             var propertiesDirectory = project.GetPropertiesDirectory();
-            project.AddFile(propertiesDirectory, Resources.LocalizationAssemblyInfoFileName, localizationAssemblyInfoFileText);
-        }
+            propertiesDirectory.AddFile(Resources.LocalizationAssemblyInfoFileName, localizationAssemblyInfoFileText);
+            WriteLine("Localization assembly file created");
 
+            //now localization enabled - request localization info
+            FindLocalizationInfo();
 
-        private static string GenerateLocalizationKeysFileText(Project project, string localizationDirectoryName)
-        {
-            var localizationKeysTemplate = new LocalizationKeysTemplate();
-            localizationKeysTemplate.Session = new Dictionary<string, object>();
-            localizationKeysTemplate.Session["NamespaceName"] = string.Format("{0}.{1}", project.GetRootNamespace(), localizationDirectoryName);
-            localizationKeysTemplate.Initialize();
-            return localizationKeysTemplate.TransformText();
-        }
-
-        private static string GenerateLocalizationAssemblyInfoFileText(string localesDirectoryName, string localizationDirectoryName)
-        {
-            var localizationAssemblyInfoTemplate = new LocalizationAssemblyInfoTemplate();
-            localizationAssemblyInfoTemplate.Session = new Dictionary<string, object>();
-            localizationAssemblyInfoTemplate.Session["LocalesDirectoryName"] = localesDirectoryName;
-            localizationAssemblyInfoTemplate.Session["LocalizationDirectoryName"] = localizationDirectoryName;
-            localizationAssemblyInfoTemplate.Initialize();
-            return localizationAssemblyInfoTemplate.TransformText();
+            //add default locale
+            AddLocale(DefaultLocaleKey, DefaultLocaleTitle, GetDefaultLocale().Locale);
+           
+            WriteLine("Localization enabled");
         }
     }
 }

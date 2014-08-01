@@ -5,6 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ parameter name="Key" type="System.String" #>
 <#@ parameter name="Title" type="System.String" #>
-<Locale Key="<#= Key #>" Title="<#= Title #>">
+<#@ parameter name="Locale" type="WPFLocales.Model.ILocale" #>
+<Locale Key="<#= Key #>" Title="<#= Title #>" <#if(Locale==null){#>IsDefault="true"<#}#>>
 	
 </Locale>

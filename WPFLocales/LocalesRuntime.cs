@@ -7,8 +7,8 @@ using System.Windows;
 using System.Xml.Serialization;
 using WPFLocales.Exceptions;
 using WPFLocales.Model;
+using WpfLocales.Model.Xml;
 using WPFLocales.Utils;
-using WPFLocales.Xml;
 
 namespace WPFLocales
 {

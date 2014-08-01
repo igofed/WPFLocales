@@ -1,16 +1,19 @@
-﻿using System.IO;
+﻿using EnvDTE;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using EnvDTE;
-using PS.Properties;
+using WPFLocales.Powershell.Properties;
 
-namespace PS.Utils
+namespace WPFLocales.Powershell.Utils
 {
-    internal class LocalizationAssemblyInfo
+    public class LocalizationAssemblyInfo
     {
         public Project Project { get; set; }
         public ProjectItem LocalesDirectory { get; set; }
         public ProjectItem LocalizationDirectory { get; set; }
+        public ProjectItem LocalizationDesignDataDirectory { get; set; }
+        public ProjectItem LocalizationKeys { get; set; }
+        public string LocalizationNamespace { get; set; }
 
         public static LocalizationAssemblyInfo FromProject(Project project)
         {
@@ -31,11 +34,18 @@ namespace PS.Utils
             var localesDirectory = project.GetProjectItems().FirstOrDefault(i => i.Name == localesDirectoryName);
             var localizationDirectory = project.GetProjectItems().FirstOrDefault(i => i.Name == localizationDirectoryName);
 
+            var localizationDesignTimeDirectory = localizationDirectory.GetProjectItemItems().FirstOrDefault(i => i.Name == Resources.DesignTimeDataDirectoryName);
+
+            var localizationKeys = localizationDirectory.GetProjectItemItems().FirstOrDefault(i => i.Name == Resources.LocalizationKeysFileName);
+
             return new LocalizationAssemblyInfo
             {
                 Project =  project,
                 LocalesDirectory = localesDirectory,
-                LocalizationDirectory = localizationDirectory
+                LocalizationDirectory = localizationDirectory,
+                LocalizationDesignDataDirectory = localizationDesignTimeDirectory,
+                LocalizationKeys = localizationKeys,
+                LocalizationNamespace = localizationDirectoryName
             };
         }
 

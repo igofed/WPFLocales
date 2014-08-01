@@ -1,10 +1,10 @@
 ﻿using EnvDTE;
-using PS.Properties;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using WPFLocales.Powershell.Properties;
 
-namespace PS.Utils
+namespace WPFLocales.Powershell.Utils
 {
     internal static class DteUtils
     {
@@ -38,14 +38,23 @@ namespace PS.Utils
             return solution.GetProjects().Select(LocalizationAssemblyInfo.FromProject).FirstOrDefault(info => info != null);
         }
 
-        public static ProjectItem AddFile(this Project project, ProjectItem parent, string fileName, string content)
+        public static ProjectItem AddFile(this Project project, string fileName, string content)
         {
             var projectFileInfo = new FileInfo(project.FullName);
             var directory = projectFileInfo.Directory;
-            var assemblyFileInfo = Path.Combine(directory.FullName, parent.Name, fileName);
+            var filePath = Path.Combine(directory.FullName, fileName);
+            File.WriteAllText(filePath, content);
+
+            return project.ProjectItems.AddFromFile(filePath);
+        }
+
+        public static ProjectItem AddFile(this ProjectItem projectItem, string fileName, string content)
+        {
+            var directory = projectItem.GetFullPath();
+            var assemblyFileInfo = Path.Combine(directory, fileName);
             File.WriteAllText(assemblyFileInfo, content);
 
-            return parent.ProjectItems.AddFromFile(assemblyFileInfo);
+            return projectItem.ProjectItems.AddFromFile(assemblyFileInfo);
         }
 
         public static ProjectItem AddDirectory(this Project project, string directoryName)
@@ -58,14 +67,37 @@ namespace PS.Utils
             return projectItem.ProjectItems.AddFolder(directoryName);
         }
 
+        public static void ChangeContent(this ProjectItem projectItem, string newContent)
+        {
+            var fullPath = projectItem.GetFullPath();
+            File.WriteAllText(fullPath, newContent);
+        }
+
         public static string GetRootNamespace(this Project project)
         {
             return project.GetPropertyValue<string>("RootNamespace");
         }
 
+        public static string GetFullPath(this ProjectItem item)
+        {
+            return item.GetPropertyValue<string>("FullPath");
+        }
+
         private static T GetPropertyValue<T>(this Project project, string propertyName)
         {
             var property = project.Properties.Item(propertyName);
+
+            if (property == null)
+            {
+                return default(T);
+            }
+
+            return (T)property.Value;
+        }
+
+        private static T GetPropertyValue<T>(this ProjectItem item, string propertyName)
+        {
+            var property = item.Properties.Item(propertyName);
 
             if (property == null)
             {
