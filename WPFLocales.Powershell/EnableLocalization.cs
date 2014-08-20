@@ -69,12 +69,12 @@ namespace WPFLocales.Powershell
 
 
             //add localization keys file
-            var localizationKeysFileText = Templates.Templates.GenerateLocalizationKeysFileText(project.GetRootNamespace(), localizationDirectoryName);
+            var localizationKeysFileText = Templates.TemplatesHelper.GenerateLocalizationKeysFileText(project.GetRootNamespace(), localizationDirectoryName);
             localizationDirectory.AddFile(Resources.LocalizationKeysFileName, localizationKeysFileText);
             WriteLine("Localization keys file created");
 
             //add localization assembly file
-            var localizationAssemblyInfoFileText = Templates.Templates.GenerateLocalizationAssemblyInfoFileText(localesDirectoryName, localizationDirectoryName);
+            var localizationAssemblyInfoFileText = Templates.TemplatesHelper.GenerateLocalizationAssemblyInfoFileText(localesDirectoryName, localizationDirectoryName);
             var propertiesDirectory = project.GetPropertiesDirectory();
             propertiesDirectory.AddFile(Resources.LocalizationAssemblyInfoFileName, localizationAssemblyInfoFileText);
             WriteLine("Localization assembly file created");

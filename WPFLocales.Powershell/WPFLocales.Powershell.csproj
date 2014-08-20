@@ -78,11 +78,10 @@
       <DependentUpon>LocalizationKeysTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="SyncLocalization.cs" />
-    <Compile Include="Templates\Templates.cs" />
+    <Compile Include="Templates\TemplatesHelper.cs" />
     <Compile Include="Utils\LocaleInfo.cs" />
     <Compile Include="Utils\LocalizationAssemblyInfo.cs" />
     <Compile Include="Utils\DteUtils.cs" />
-    <Compile Include="TestLocalization.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

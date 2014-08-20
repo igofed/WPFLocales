@@ -87,14 +87,14 @@ namespace WPFLocales.Powershell
             }
 
             //create locale file
-            var localeFileText = Templates.Templates.GenerateLocaleFileText(localeKey, localeTitle, defaultLocale);
+            var localeFileText = Templates.TemplatesHelper.GenerateLocaleFileText(localeKey, localeTitle, defaultLocale);
             var localeFile = _localizationInfo.LocalesDirectory.AddFile(localeFileName, localeFileText);
             WriteLine("Locale file created");
 
 
             //create design time locale file
             var designTimeLocaleFileName = string.Format("{0}DesignTimeLocale.cs", localeKey);
-            var designTimeLocaleFileText = Templates.Templates.GenerateDesignTimeLocaleFileText(localeKey, localeTitle, _localizationInfo.Project.GetRootNamespace(), _localizationInfo.LocalizationNamespace, Resources.DesignTimeDataDirectoryName);
+            var designTimeLocaleFileText = Templates.TemplatesHelper.GenerateDesignTimeLocaleFileText(localeKey, localeTitle, _localizationInfo.Project.GetRootNamespace(), _localizationInfo.LocalizationNamespace, Resources.DesignTimeDataDirectoryName);
             _localizationInfo.LocalizationDesignDataDirectory.AddFile(designTimeLocaleFileName, designTimeLocaleFileText);
             WriteLine("Design time locale created");
 

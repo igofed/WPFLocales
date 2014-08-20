@@ -31,7 +31,14 @@ namespace WPFLocales.Powershell
                 return;
             }
 
-            AddLocale(Key, Title);
+            var defaultLocale = GetDefaultLocale();
+            if (defaultLocale == null)
+            {
+                WriteErrorLine("Can't find defaul locale to create new one");
+                return;
+            }
+
+            AddLocale(Key, Title, defaultLocale.Locale);
         }
     }
 }

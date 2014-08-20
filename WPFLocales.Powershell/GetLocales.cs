@@ -1,4 +1,5 @@
-﻿using System.Management.Automation;
+﻿using System.Linq;
+using System.Management.Automation;
 
 namespace WPFLocales.Powershell
 {
@@ -13,7 +14,10 @@ namespace WPFLocales.Powershell
                 return;
             }
 
-            foreach (var locale in GetAlLocales())
+            var defaultLocale = GetDefaultLocale();
+            WriteLine(string.Format("{0} -> {1} -> {2} (Default)", defaultLocale.LocaleItem.Name, defaultLocale.Locale.Key, defaultLocale.Locale.Title));
+
+            foreach (var locale in GetAlLocales().Where(l => l.Locale.Key != defaultLocale.Locale.Key))
             {
                 WriteLine(string.Format("{0} -> {1} -> {2}", locale.LocaleItem.Name, locale.Locale.Key, locale.Locale.Title));
             }

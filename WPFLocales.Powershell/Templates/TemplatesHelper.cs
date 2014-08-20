@@ -3,7 +3,7 @@ using WPFLocales.Model;
 
 namespace WPFLocales.Powershell.Templates
 {
-    internal class Templates
+    internal class TemplatesHelper
     {
         public static string GenerateLocalizationKeysFileText(string rootNameSpace, string localizationDirectoryName, ILocale locale = null)
         {
