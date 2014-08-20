@@ -30,63 +30,116 @@ namespace WPFLocales.Powershell.Templates
         {
             this.Write("<Locale Key=\"");
             
-            #line 9 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Key));
+            #line 7 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Locale.Key));
             
             #line default
             #line hidden
             this.Write("\" Title=\"");
             
-            #line 9 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Title));
+            #line 7 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Locale.Title != null ? Locale.Title : ""));
             
             #line default
             #line hidden
             this.Write("\" ");
             
-            #line 9 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
-if(Locale==null){
+            #line 7 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+if(Locale.IsDefault){
             
             #line default
             #line hidden
             this.Write("IsDefault=\"true\"");
             
-            #line 9 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+            #line 7 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
 }
             
             #line default
             #line hidden
-            this.Write(">\r\n\t\r\n</Locale>");
+            this.Write(">\r\n\t");
+            
+            #line 8 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+
+	if(Locale.Groups != null)
+	{
+	foreach(var group in Locale.Groups)
+	{
+	
+            
+            #line default
+            #line hidden
+            this.Write("\t<Group Key=\"");
+            
+            #line 14 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(group.Key));
+            
+            #line default
+            #line hidden
+            this.Write("\" Comment=\"");
+            
+            #line 14 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(group.Comment != null ? group.Comment : ""));
+            
+            #line default
+            #line hidden
+            this.Write("\">\r\n\t\t");
+            
+            #line 15 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+
+		if(group.Items != null)
+		{
+		foreach(var item in group.Items)
+		{
+		
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t<Item Key=\"");
+            
+            #line 21 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Key));
+            
+            #line default
+            #line hidden
+            this.Write("\" Comment=\"");
+            
+            #line 21 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Comment != null ? item.Comment : ""));
+            
+            #line default
+            #line hidden
+            this.Write("\">");
+            
+            #line 21 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Value != null ? item.Value : ""));
+            
+            #line default
+            #line hidden
+            this.Write("</Item>\r\n\t\t");
+            
+            #line 22 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+
+		}
+		}
+		
+            
+            #line default
+            #line hidden
+            this.Write("\t</Group>\r\n\t");
+            
+            #line 27 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
+
+	}
+	}
+	
+            
+            #line default
+            #line hidden
+            this.Write("</Locale>");
             return this.GenerationEnvironment.ToString();
         }
         
         #line 1 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\LocaleTemplate.tt"
-
-private string _KeyField;
-
-/// <summary>
-/// Access the Key parameter of the template.
-/// </summary>
-private string Key
-{
-    get
-    {
-        return this._KeyField;
-    }
-}
-
-private string _TitleField;
-
-/// <summary>
-/// Access the Title parameter of the template.
-/// </summary>
-private string Title
-{
-    get
-    {
-        return this._TitleField;
-    }
-}
 
 private global::WPFLocales.Model.ILocale _LocaleField;
 
@@ -109,34 +162,6 @@ public virtual void Initialize()
 {
     if ((this.Errors.HasErrors == false))
     {
-bool KeyValueAcquired = false;
-if (this.Session.ContainsKey("Key"))
-{
-    this._KeyField = ((string)(this.Session["Key"]));
-    KeyValueAcquired = true;
-}
-if ((KeyValueAcquired == false))
-{
-    object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("Key");
-    if ((data != null))
-    {
-        this._KeyField = ((string)(data));
-    }
-}
-bool TitleValueAcquired = false;
-if (this.Session.ContainsKey("Title"))
-{
-    this._TitleField = ((string)(this.Session["Title"]));
-    TitleValueAcquired = true;
-}
-if ((TitleValueAcquired == false))
-{
-    object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("Title");
-    if ((data != null))
-    {
-        this._TitleField = ((string)(data));
-    }
-}
 bool LocaleValueAcquired = false;
 if (this.Session.ContainsKey("Locale"))
 {

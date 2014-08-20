@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Management.Automation;
+using WPFLocales.Model;
 using WPFLocales.Powershell.Properties;
 using WPFLocales.Powershell.Utils;
 
@@ -83,8 +84,9 @@ namespace WPFLocales.Powershell
             FindLocalizationInfo();
 
             //add default locale
-            AddLocale(DefaultLocaleKey, DefaultLocaleTitle, GetDefaultLocale().Locale);
-           
+            var locale = new Locale { Key = DefaultLocaleKey, Title = DefaultLocaleTitle, IsDefault = true };
+            AddLocale(locale);
+
             WriteLine("Localization enabled");
         }
     }

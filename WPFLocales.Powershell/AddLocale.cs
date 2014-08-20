@@ -1,4 +1,5 @@
 ﻿using System.Management.Automation;
+using WPFLocales.Model;
 
 namespace WPFLocales.Powershell
 {
@@ -38,7 +39,8 @@ namespace WPFLocales.Powershell
                 return;
             }
 
-            AddLocale(Key, Title, defaultLocale.Locale);
+            var locale = new Locale { Key = Key, Title = Title, Groups = defaultLocale.Locale.Groups };
+            AddLocale(locale);
         }
     }
 }

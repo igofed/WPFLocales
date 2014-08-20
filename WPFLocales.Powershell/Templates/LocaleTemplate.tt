@@ -3,9 +3,29 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ parameter name="Key" type="System.String" #>
-<#@ parameter name="Title" type="System.String" #>
 <#@ parameter name="Locale" type="WPFLocales.Model.ILocale" #>
-<Locale Key="<#= Key #>" Title="<#= Title #>" <#if(Locale==null){#>IsDefault="true"<#}#>>
-	
+<Locale Key="<#= Locale.Key #>" Title="<#= Locale.Title != null ? Locale.Title : "" #>" <#if(Locale.IsDefault){#>IsDefault="true"<#}#>>
+	<#
+	if(Locale.Groups != null)
+	{
+	foreach(var group in Locale.Groups)
+	{
+	#>
+	<Group Key="<#= group.Key #>" Comment="<#= group.Comment != null ? group.Comment : "" #>">
+		<#
+		if(group.Items != null)
+		{
+		foreach(var item in group.Items)
+		{
+		#>
+			<Item Key="<#= item.Key #>" Comment="<#= item.Comment != null ? item.Comment : "" #>"><#= item.Value != null ? item.Value : "" #></Item>
+		<#
+		}
+		}
+		#>
+	</Group>
+	<#
+	}
+	}
+	#>
 </Locale>

@@ -21,9 +21,8 @@ namespace SampleApplication
                 var s = new XmlSerializer(typeof(XmlLocale));
                 var locale = (ILocale)s.Deserialize(reader);
 
-                var template = new LocalizationKeysTemplate();
+                var template = new LocaleTemplate();
                 template.Session = new Dictionary<string, object>();
-                template.Session["NamespaceName"] = "RRrr";
                 template.Session["Locale"] = locale;
                 template.Initialize();
                 var text = template.TransformText();

@@ -73,10 +73,10 @@ namespace WPFLocales.Powershell
             return GetAlLocales().FirstOrDefault(l => l.Locale.IsDefault);
         }
 
-        protected void AddLocale(string localeKey, string localeTitle, ILocale defaultLocale = null)
+        protected void AddLocale(ILocale locale)
         {
             //create lcocale file name
-            var localeFileName = string.Format("{0}.locale", localeKey);
+            var localeFileName = string.Format("{0}.locale", locale.Key);
 
             //test for such locale exist
             var existingLocale = _localizationInfo.LocalesDirectory.GetProjectItemItems().FirstOrDefault(i => i.Name == localeFileName);
@@ -87,14 +87,14 @@ namespace WPFLocales.Powershell
             }
 
             //create locale file
-            var localeFileText = Templates.TemplatesHelper.GenerateLocaleFileText(localeKey, localeTitle, defaultLocale);
+            var localeFileText = Templates.TemplatesHelper.GenerateLocaleFileText(locale);
             var localeFile = _localizationInfo.LocalesDirectory.AddFile(localeFileName, localeFileText);
             WriteLine("Locale file created");
 
 
             //create design time locale file
-            var designTimeLocaleFileName = string.Format("{0}DesignTimeLocale.cs", localeKey);
-            var designTimeLocaleFileText = Templates.TemplatesHelper.GenerateDesignTimeLocaleFileText(localeKey, localeTitle, _localizationInfo.Project.GetRootNamespace(), _localizationInfo.LocalizationNamespace, Resources.DesignTimeDataDirectoryName);
+            var designTimeLocaleFileName = string.Format("{0}DesignTimeLocale.cs", locale.Key);
+            var designTimeLocaleFileText = Templates.TemplatesHelper.GenerateDesignTimeLocaleFileText(locale.Key, locale.Title, _localizationInfo.Project.GetRootNamespace(), _localizationInfo.LocalizationNamespace, Resources.DesignTimeDataDirectoryName);
             _localizationInfo.LocalizationDesignDataDirectory.AddFile(designTimeLocaleFileName, designTimeLocaleFileText);
             WriteLine("Design time locale created");
 

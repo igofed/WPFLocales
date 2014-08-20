@@ -43,6 +43,9 @@
     <Compile Include="ILocale.cs" />
     <Compile Include="ILocaleGroup.cs" />
     <Compile Include="ILocaleItem.cs" />
+    <Compile Include="Locale.cs" />
+    <Compile Include="LocaleGroup.cs" />
+    <Compile Include="LocaleItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xml\XmlLocale.cs" />
     <Compile Include="Xml\XmlLocaleGroup.cs" />

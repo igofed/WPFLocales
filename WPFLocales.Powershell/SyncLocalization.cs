@@ -39,7 +39,7 @@ namespace WPFLocales.Powershell
             }
 
             //check default locale for duplicate items in groups
-            foreach (var group in defaultLocale.Locale.Groups.Where(g=>g.Items != null))
+            foreach (var group in defaultLocale.Locale.Groups.Where(g => g.Items != null))
             {
                 var duplicateItems = group.Items.GroupBy(i => i.Key).ToArray();
                 if (duplicateItems.Length > 0)
@@ -53,9 +53,10 @@ namespace WPFLocales.Powershell
             var localizationKeysFileText = Templates.TemplatesHelper.GenerateLocalizationKeysFileText(_localizationInfo.Project.GetRootNamespace(), _localizationInfo.LocalizationNamespace, defaultLocale.Locale);
             _localizationInfo.LocalizationKeys.ChangeContent(localizationKeysFileText);
 
-            //sync design time files and locales files with default locale
+
             foreach (var localeInfo in GetAlLocales())
             {
+                //sync locales files with default locale
                 if (!localeInfo.Locale.IsDefault)
                 {
                     //find groups, whick missed in non default locale, but exist in default one and add them

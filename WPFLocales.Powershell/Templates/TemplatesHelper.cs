@@ -25,12 +25,10 @@ namespace WPFLocales.Powershell.Templates
             return localizationAssemblyInfoTemplate.TransformText();
         }
 
-        public static string GenerateLocaleFileText(string key, string title, ILocale locale)
+        public static string GenerateLocaleFileText(ILocale locale)
         {
             var localeTemplate = new LocaleTemplate();
             localeTemplate.Session = new Dictionary<string, object>();
-            localeTemplate.Session["Key"] = key;
-            localeTemplate.Session["Title"] = title;
             localeTemplate.Session["Locale"] = locale;
             localeTemplate.Initialize();
             return localeTemplate.TransformText();
