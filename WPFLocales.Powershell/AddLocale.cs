@@ -9,7 +9,7 @@ namespace WPFLocales.Powershell
         [Parameter(Mandatory = true, HelpMessage = "Key of locale to add")]
         public string Key { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Title of locale to add")]
+        [Parameter(Mandatory = true, HelpMessage = "Title of locale to add")]
         public string Title { get; set; }
 
         protected override void ProcessRecord()

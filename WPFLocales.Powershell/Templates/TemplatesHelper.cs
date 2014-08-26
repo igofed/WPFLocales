@@ -34,7 +34,7 @@ namespace WPFLocales.Powershell.Templates
             return localeTemplate.TransformText();
         }
 
-        public static string GenerateDesignTimeLocaleFileText(string key, string title, string rootNamespace, string localizationNamespace, string designDataNamespace, ILocale locale = null)
+        public static string GenerateDesignTimeLocaleFileText(string key, string title, string rootNamespace, string localizationNamespace, string designDataNamespace, ILocale locale)
         {
             var localeDesignTemplate = new DesignTimeLocaleTemplate();
             localeDesignTemplate.Session = new Dictionary<string, object>();

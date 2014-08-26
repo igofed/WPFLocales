@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using WpfLocales.Model.Xml;
 using WPFLocales.Model;
 using WPFLocales.Powershell.Properties;
+using WPFLocales.Powershell.Templates;
 using WPFLocales.Powershell.Utils;
 
 namespace WPFLocales.Powershell
@@ -87,14 +88,14 @@ namespace WPFLocales.Powershell
             }
 
             //create locale file
-            var localeFileText = Templates.TemplatesHelper.GenerateLocaleFileText(locale);
+            var localeFileText = TemplatesHelper.GenerateLocaleFileText(locale);
             var localeFile = _localizationInfo.LocalesDirectory.AddFile(localeFileName, localeFileText);
             WriteLine("Locale file created");
 
 
             //create design time locale file
             var designTimeLocaleFileName = string.Format("{0}DesignTimeLocale.cs", locale.Key);
-            var designTimeLocaleFileText = Templates.TemplatesHelper.GenerateDesignTimeLocaleFileText(locale.Key, locale.Title, _localizationInfo.Project.GetRootNamespace(), _localizationInfo.LocalizationNamespace, Resources.DesignTimeDataDirectoryName);
+            var designTimeLocaleFileText = TemplatesHelper.GenerateDesignTimeLocaleFileText(locale.Key, locale.Title, _localizationInfo.Project.GetRootNamespace(), _localizationInfo.LocalizationNamespace, Resources.DesignTimeDataDirectoryName, locale);
             _localizationInfo.LocalizationDesignDataDirectory.AddFile(designTimeLocaleFileName, designTimeLocaleFileText);
             WriteLine("Design time locale created");
 

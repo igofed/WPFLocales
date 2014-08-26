@@ -135,7 +135,7 @@ if(Locale.IsDefault){
             
             #line default
             #line hidden
-            this.Write("</Locale>");
+            this.Write("\r\n</Locale>");
             return this.GenerationEnvironment.ToString();
         }
         
