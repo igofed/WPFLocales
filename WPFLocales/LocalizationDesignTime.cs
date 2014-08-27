@@ -100,7 +100,7 @@ namespace WPFLocales
 
         private static IEnumerable<DesignTimeLocale> GetAllLocales()
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetCustomAttributes(typeof(LocalizationAssembly)).Any());
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetCustomAttributes(typeof(LocalizationAssembly), false).Any());
 
             var types = from assembly in assemblies
                         from type in assembly.GetTypes()
@@ -113,7 +113,7 @@ namespace WPFLocales
         //
         private static bool _isLocalesLoaded;
         //locale dictionaries for each locale parent
-        private static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>>> _designTimeLocaleValues;
+        private static IDictionary<string, IDictionary<string, IDictionary<string, string>>> _designTimeLocaleValues;
         //locale parent of each control, that uses localized strings
         private static readonly Dictionary<DependencyObject, Control> DesignTimeLocaleParents = new Dictionary<DependencyObject, Control>();
         //locales per each locale parent

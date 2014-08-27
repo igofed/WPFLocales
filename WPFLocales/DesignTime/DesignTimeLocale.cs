@@ -20,7 +20,7 @@ namespace WPFLocales.DesignTime
         /// <summary>
         /// Locale's string values
         /// </summary>
-        public IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> Values { get; protected set; }
+        public IDictionary<string, IDictionary<string, string>> Values { get; protected set; }
 
         /// <summary>
         /// 

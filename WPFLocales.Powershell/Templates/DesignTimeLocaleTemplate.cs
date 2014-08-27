@@ -95,8 +95,7 @@ namespace ");
             
             #line default
             #line hidden
-            this.Write("\t\t\t\tvar values = new Dictionary<string, IReadOnlyDictionary<string,string>>\r\n\t\t\t\t" +
-                    "{\r\n\t\t\t\t");
+            this.Write("\t\t\t\tValues = new Dictionary<string, IDictionary<string,string>>\r\n\t\t\t\t{\r\n\t\t\t\t");
             
             #line 40 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
  
@@ -113,8 +112,8 @@ namespace ");
             
             #line default
             #line hidden
-            this.Write("\", \r\n\t\t\t\t\t\tnew ReadOnlyDictionary<string, string>(new Dictionary<string, string>\r" +
-                    "\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t");
+            this.Write("\", \r\n\t\t\t\t\t\tnew Dictionary<string, string>(new Dictionary<string, string>\r\n\t\t\t\t\t\t{" +
+                    "\r\n\t\t\t\t\t\t");
             
             #line 48 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
 
@@ -156,10 +155,9 @@ namespace ");
             
             #line default
             #line hidden
-            this.Write("\t\t\t\t};\r\n\t\t\t\tValues = new ReadOnlyDictionary<string, IReadOnlyDictionary<string, s" +
-                    "tring>>(values);\r\n\t\t\t");
+            this.Write("\t\t\t\t};\r\n\t\t\t");
             
-            #line 63 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            #line 62 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
  
 			} 
 			

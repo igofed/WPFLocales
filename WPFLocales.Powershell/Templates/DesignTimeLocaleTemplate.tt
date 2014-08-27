@@ -35,7 +35,7 @@ namespace <#= NamespaceName #>
 			if(Locale != null) 
 			{
 			#>
-				var values = new Dictionary<string, IReadOnlyDictionary<string,string>>
+				Values = new Dictionary<string, IDictionary<string,string>>
 				{
 				<# 
 				foreach(var group in Locale.Groups) 
@@ -43,7 +43,7 @@ namespace <#= NamespaceName #>
 				#>
 					{
 						"<#= group.Key #>", 
-						new ReadOnlyDictionary<string, string>(new Dictionary<string, string>
+						new Dictionary<string, string>(new Dictionary<string, string>
 						{
 						<#
 						foreach(var item in group.Items)
@@ -59,7 +59,6 @@ namespace <#= NamespaceName #>
 				}
 				#>
 				};
-				Values = new ReadOnlyDictionary<string, IReadOnlyDictionary<string, string>>(values);
 			<# 
 			} 
 			#>

@@ -26,7 +26,7 @@ namespace WPFLocales
         /// <summary>
         /// Gets available loaded locales
         /// </summary>
-        public static IReadOnlyCollection<string> AvailableLocales { get; private set; }
+        public static IEnumerable<string> AvailableLocales { get; private set; }
 
         /// <summary>
         /// Gets default locale. Default locale used when items for current locale missing 
@@ -90,13 +90,14 @@ namespace WPFLocales
         /// <param name="currentLocale">Current application locale - should be specified if start locale differs from default locale</param>
         public static void Initialize(string currentLocale = null)
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetCustomAttributes(typeof(LocalesDirectory)).Any()).ToArray();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetCustomAttributes(typeof(LocalesDirectory), false).Any()).ToArray();
             if (assemblies.Length > 0)
                 throw new NotSupportedException(@"Two or more assemblies have ""LocalesDirectory"" attribute: " + string.Join(", ", assemblies.Select(a => a.FullName)));
 
             var assembly = assemblies[0];
-            var localesDirectoryAttribute = assembly.GetCustomAttribute<LocalesDirectory>();
-            var localesDirectory = new DirectoryInfo(localesDirectoryAttribute.Value);
+            var localesDirectoryAttribute = (LocalesDirectory)assembly.GetCustomAttributes(typeof(LocalesDirectory), false).First();
+                
+                var localesDirectory = new DirectoryInfo(localesDirectoryAttribute.Value);
 
             if (!localesDirectory.Exists || !localesDirectory.GetFiles().Any(f => f.FullName.EndsWith(".locale")))
                 throw new NotSupportedException("Directory should exists or contain locale files (.locale)");
@@ -245,7 +246,7 @@ namespace WPFLocales
         }
 
         //search for item by key in localization dictionary
-        private static bool TryGetTextByKeyInLocaleDictionary(Enum localizationKey, IReadOnlyDictionary<string, Dictionary<string, string>> localeDictionary, out string text)
+        private static bool TryGetTextByKeyInLocaleDictionary(Enum localizationKey, IDictionary<string, Dictionary<string, string>> localeDictionary, out string text)
         {
             var groupName = localizationKey.GetType().Name;
             var itemName = localizationKey.ToString();
