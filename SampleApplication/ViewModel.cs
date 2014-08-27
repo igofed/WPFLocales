@@ -20,17 +20,17 @@ namespace SampleApplication
         public ObservableCollection<string> Locales { get; set; }
         public string CurrentLocale
         {
-            get { return WPFLocales.Locales.CurrentLocale; }
-            set { WPFLocales.Locales.CurrentLocale = value; RaisePropertyChanged(); }
+            get { return WPFLocales.Localization.CurrentLocale; }
+            set { WPFLocales.Localization.CurrentLocale = value; RaisePropertyChanged(); }
         }
 
         public ICommand ChangeStateCommand { get; set; }
 
         public ViewModel()
         {
-            if (WPFLocales.Locales.AvailableLocales != null)
+            if (WPFLocales.Localization.AvailableLocales != null)
             {
-                Locales = new ObservableCollection<string>(WPFLocales.Locales.AvailableLocales);
+                Locales = new ObservableCollection<string>(WPFLocales.Localization.AvailableLocales);
             }
             States = new ObservableCollection<State>(new[] { State.Error, State.Ok });
             ChangeStateCommand = new DelegateCommand(() =>

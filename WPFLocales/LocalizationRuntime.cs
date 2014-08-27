@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Xml.Serialization;
 using WPFLocales.Exceptions;
@@ -15,7 +16,7 @@ namespace WPFLocales
     /// <summary>
     /// Application's localization core
     /// </summary>
-    public partial class Locales
+    public partial class Localization
     {
         /// <summary>
         /// Occurs on CurrentLocale changes
@@ -26,12 +27,12 @@ namespace WPFLocales
         /// Gets available loaded locales
         /// </summary>
         public static IReadOnlyCollection<string> AvailableLocales { get; private set; }
-        
+
         /// <summary>
         /// Gets default locale. Default locale used when items for current locale missing 
         /// </summary>
         public static string DefaultLocale { get; private set; }
-        
+
         /// <summary>
         /// Gets or sets current locale, locale which is currently used by application
         /// </summary>
@@ -64,6 +65,21 @@ namespace WPFLocales
         /// </summary>
         public static bool IsInitialized { get; private set; }
 
+        /// <summary>
+        /// ILocalization instance for injection
+        /// </summary>
+        public static ILocalization Instance
+        {
+            get
+            {
+                if (!IsInitialized)
+                    throw new NotSupportedException("Initializa first");
+
+                return _localizationInstance;
+            }
+        }
+        private static ILocalization _localizationInstance;
+
 
         private static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _allLocalesDictionary;
 
@@ -71,31 +87,23 @@ namespace WPFLocales
         /// <summary>
         /// Initializes application's localization core
         /// </summary>
-        /// <param name="localesPath">Path to directory with .locales files</param>
-        /// <param name="defaultLocale">Default application locale - used when items for current locale missing</param>
         /// <param name="currentLocale">Current application locale - should be specified if start locale differs from default locale</param>
-        public static void Initialize(string localesPath, string defaultLocale, string currentLocale = null)
+        public static void Initialize(string currentLocale = null)
         {
-            Initialize(new DirectoryInfo(localesPath), defaultLocale, currentLocale);
-        }
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetCustomAttributes(typeof(LocalesDirectory)).Any()).ToArray();
+            if (assemblies.Length > 0)
+                throw new NotSupportedException(@"Two or more assemblies have ""LocalesDirectory"" attribute: " + string.Join(", ", assemblies.Select(a => a.FullName)));
 
-        /// <summary>
-        /// Initializes application's localization core
-        /// </summary>
-        /// <param name="localesPath">Path to directory with .locales files</param>
-        /// <param name="defaultLocale">Default application locale - used when items for current locale missing</param>
-        /// <param name="currentLocale">Current application locale - should be specified if start locale differs from default locale</param>
-        public static void Initialize(DirectoryInfo localesPath, string defaultLocale, string currentLocale = null)
-        {
-            if (string.IsNullOrEmpty(defaultLocale))
-                throw new NullReferenceException("Default localse should be specified");
+            var assembly = assemblies[0];
+            var localesDirectoryAttribute = assembly.GetCustomAttribute<LocalesDirectory>();
+            var localesDirectory = new DirectoryInfo(localesDirectoryAttribute.Value);
 
-            if (!localesPath.Exists || !localesPath.GetFiles().Any(f => f.FullName.EndsWith(".locale")))
+            if (!localesDirectory.Exists || !localesDirectory.GetFiles().Any(f => f.FullName.EndsWith(".locale")))
                 throw new NotSupportedException("Directory should exists or contain locale files (.locale)");
 
             //read all locales from file
             var locales = new List<ILocale>();
-            var files = localesPath.GetFiles().Where(f => f.FullName.EndsWith(".locale"));
+            var files = localesDirectory.GetFiles().Where(f => f.FullName.EndsWith(".locale"));
             foreach (var file in files)
             {
                 using (var stream = new FileStream(file.FullName, FileMode.Open))
@@ -107,21 +115,18 @@ namespace WPFLocales
             }
 
             //and initialize with locales
-            Initialize(locales, defaultLocale, currentLocale);
+            Initialize(locales, currentLocale);
         }
 
         /// <summary>
         /// Initializes application's localization core
         /// </summary>
         /// <param name="locales">ILocale collection of locales</param>
-        /// <param name="defaultLocale">Default application locale - used when items for current locale missing</param>
         /// <param name="currentLocale">Current application locale - should be specified if start locale differs from default locale</param>
-        public static void Initialize(IEnumerable<ILocale> locales, string defaultLocale, string currentLocale = null)
+        public static void Initialize(IEnumerable<ILocale> locales, string currentLocale = null)
         {
             if (locales == null)
                 throw new NullReferenceException("Locales should be specified");
-            if (string.IsNullOrEmpty(defaultLocale))
-                throw new NullReferenceException("Default locale should be specified");
 
             var localesList = locales.ToList();
 
@@ -132,15 +137,19 @@ namespace WPFLocales
             //looking for duplicate locales
             var firstDuplicateLocale = localesList.GroupBy(l => l.Key).FirstOrDefault(g => g.Count() > 1);
             if (firstDuplicateLocale != null)
-                throw new NotSupportedException(string.Format("Locale with Key {0} already specified", firstDuplicateLocale.Key));
+                throw new NotSupportedException(string.Format(@"Locale with Key ""{0}"" already specified", firstDuplicateLocale.Key));
 
             //looking for default locale in locales list
-            if (localesList.All(l => l.Key != defaultLocale))
-                throw new NotSupportedException(string.Format("Default locale ({0}) should be specified in locales", defaultLocale));
+            if (!localesList.Any(l => l.IsDefault))
+                throw new NotSupportedException("Locales should have default one");
+
+            //check multi default locales
+            if (localesList.Count(l => l.IsDefault) > 1)
+                throw new NotSupportedException("Multiple default locales not supported");
 
             //looking for current locale in locales list
             if (!string.IsNullOrEmpty(currentLocale) && localesList.All(l => l.Key != currentLocale))
-                throw new NotSupportedException(string.Format("Current locale ({0}) should be specified in locales", defaultLocale));
+                throw new NotSupportedException(string.Format("Current locale ({0}) should be specified in locales", currentLocale));
 
 
             _allLocalesDictionary = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
@@ -150,7 +159,7 @@ namespace WPFLocales
 
                 //looking for empty group collection
                 if (locale.Groups == null || locale.Groups.Count == 0)
-                    throw new NotSupportedException(string.Format("Locale groups empty for locale {0}", locale.Key));
+                    throw new NotSupportedException(string.Format(@"Locale groups empty for locale ""{0}""", locale.Key));
 
                 //looking for group with blank key
                 if (locale.Groups.Any(g => string.IsNullOrEmpty(g.Key)))
@@ -183,11 +192,13 @@ namespace WPFLocales
 
             AvailableLocales = new ReadOnlyCollection<string>(localesList.Select(l => l.Key).ToList());
 
-            DefaultLocale = defaultLocale;
-            CurrentLocale = string.IsNullOrEmpty(currentLocale) ? defaultLocale : currentLocale;
+            DefaultLocale = localesList.First(l => l.IsDefault).Key;
+            CurrentLocale = string.IsNullOrEmpty(currentLocale) ? DefaultLocale : currentLocale;
+
+            _localizationInstance = new LocalizationImplementation();
 
             //if we here, so all steps passed and since now Locales initialized
-            IsInitialized = true;
+            IsInitialized = true;   
         }
 
         /// <summary>
@@ -197,10 +208,10 @@ namespace WPFLocales
         /// <param name="isUseDefaultLocale">Specifies if default locale should be used if no item found in current, True by default</param>
         /// <returns>Localized string for specified localization key</returns>
         /// <exception cref="WPFLocales.Exceptions.LocalizationKeyNotFoundException">Throws if localization key not exists in current and default locale</exception>
-        public static string GetTextByLocaleKey(Enum localizationKey, bool isUseDefaultLocale = true)
+        public static string GetTextByLocalizationKey(Enum localizationKey, bool isUseDefaultLocale = true)
         {
             string text;
-            if (!TryGetTextByLocaleKey(localizationKey, out text, isUseDefaultLocale))
+            if (!TryGetTextByLocalizationKey(localizationKey, out text, isUseDefaultLocale))
             {
                 throw new LocalizationKeyNotFoundException(string.Format("No item found for localization group {0} and item {1}", localizationKey.GetType().Name, localizationKey));
             }
@@ -214,7 +225,7 @@ namespace WPFLocales
         /// <param name="text">Localized string for specified localization key</param>
         /// <param name="isUseDefaultLocale">Specifies if default locale should be used if no item found in current, True by default</param>
         /// <returns>Indicates whether localized string was found</returns>
-        public static bool TryGetTextByLocaleKey(Enum localizationKey, out string text, bool isUseDefaultLocale = true)
+        public static bool TryGetTextByLocalizationKey(Enum localizationKey, out string text, bool isUseDefaultLocale = true)
         {
             if (!IsInitialized)
                 throw new NotSupportedException("Should be initialized before");

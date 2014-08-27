@@ -7,7 +7,7 @@
         xmlns:locales="clr-namespace:WPFLocales;assembly=WPFLocales"
         Title="MainWindow" Width="300" Height="200"
         
-        locales:Locales.DesignTimeLocale="RU"
+        locales:Localization.DesignTimeLocale="RU"
         
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"

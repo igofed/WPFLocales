@@ -3,9 +3,9 @@ using System.IO;
 using System.Windows;
 using System.Xml.Serialization;
 using WpfLocales.Model.Xml;
-using WPFLocales;
 using WPFLocales.Model;
 using WPFLocales.Powershell.Templates;
+using Localization = WPFLocales.Localization;
 
 namespace SampleApplication
 {
@@ -28,7 +28,7 @@ namespace SampleApplication
                 var text = template.TransformText();
             }
 
-            Locales.Initialize(new DirectoryInfo("Locales"), "RU");
+            Localization.Initialize();
             base.OnStartup(e);
         }
     }

@@ -44,11 +44,11 @@ namespace WPFLocales.View
         /// <returns></returns>
         protected string GetLocalizedString(Enum key, bool withFormating = true)
         {
-            var text = _isInDesignMode ? Locales.GetTextByLocaleKey(ParentDependencyObject, key) : Locales.GetTextByLocaleKey(key);
+            var text = _isInDesignMode ? Localization.GetTextByLocalizationKey(ParentDependencyObject, key) : Localization.GetTextByLocalizationKey(key);
 
             if (withFormating && FormatKey != null)
             {
-                var format = _isInDesignMode ? Locales.GetTextByLocaleKey(ParentDependencyObject, FormatKey) : Locales.GetTextByLocaleKey(FormatKey);
+                var format = _isInDesignMode ? Localization.GetTextByLocalizationKey(ParentDependencyObject, FormatKey) : Localization.GetTextByLocalizationKey(FormatKey);
                 text = string.Format(format, text);
             }
 
