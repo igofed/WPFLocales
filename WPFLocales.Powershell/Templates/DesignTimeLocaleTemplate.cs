@@ -99,6 +99,8 @@ namespace ");
             
             #line 40 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
  
+				if(Locale.Groups != null)
+				{
 				foreach(var group in Locale.Groups) 
 				{
 				
@@ -107,7 +109,7 @@ namespace ");
             #line hidden
             this.Write("\t\t\t\t\t{\r\n\t\t\t\t\t\t\"");
             
-            #line 45 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            #line 47 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(group.Key));
             
             #line default
@@ -115,8 +117,10 @@ namespace ");
             this.Write("\", \r\n\t\t\t\t\t\tnew Dictionary<string, string>(new Dictionary<string, string>\r\n\t\t\t\t\t\t{" +
                     "\r\n\t\t\t\t\t\t");
             
-            #line 48 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            #line 50 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
 
+						if(group.Items != null)
+						{
 						foreach(var item in group.Items)
 						{
 						
@@ -125,22 +129,23 @@ namespace ");
             #line hidden
             this.Write("\t\t\t\t\t\t{ \"");
             
-            #line 52 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            #line 56 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Key));
             
             #line default
             #line hidden
             this.Write("\", \"");
             
-            #line 52 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            #line 56 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Value));
             
             #line default
             #line hidden
             this.Write("\" },\r\n\t\t\t\t\t\t");
             
-            #line 53 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            #line 57 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
 
+						}
 						}
 						
             
@@ -148,8 +153,9 @@ namespace ");
             #line hidden
             this.Write("\t\t\t\t\t\t})\r\n\t\t\t\t\t},\r\n\t\t\t\t");
             
-            #line 58 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            #line 63 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
 	
+				}
 				}
 				
             
@@ -157,7 +163,7 @@ namespace ");
             #line hidden
             this.Write("\t\t\t\t};\r\n\t\t\t");
             
-            #line 62 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
+            #line 68 "D:\Development\WPFLocales\WPFLocales.Powershell\Templates\DesignTimeLocaleTemplate.tt"
  
 			} 
 			

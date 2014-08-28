@@ -38,6 +38,8 @@ namespace <#= NamespaceName #>
 				Values = new Dictionary<string, IDictionary<string,string>>
 				{
 				<# 
+				if(Locale.Groups != null)
+				{
 				foreach(var group in Locale.Groups) 
 				{
 				#>
@@ -46,16 +48,20 @@ namespace <#= NamespaceName #>
 						new Dictionary<string, string>(new Dictionary<string, string>
 						{
 						<#
+						if(group.Items != null)
+						{
 						foreach(var item in group.Items)
 						{
 						#>
 						{ "<#= item.Key #>", "<#= item.Value #>" },
 						<#
 						}
+						}
 						#>
 						})
 					},
 				<#	
+				}
 				}
 				#>
 				};

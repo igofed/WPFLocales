@@ -1,4 +1,5 @@
-﻿using EnvDTE;
+﻿using System;
+using EnvDTE;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -62,7 +63,7 @@ namespace WPFLocales.Powershell
                     var serializer = new XmlSerializer(typeof(XmlLocale));
                     var localeObject = (ILocale)serializer.Deserialize(reader);
 
-                    locales.Add(new LocaleInfo { Locale = localeObject, LocaleItem = locale, DesignTimeLocaleItem = designTimeLocaleItem});
+                    locales.Add(new LocaleInfo { Locale = localeObject, LocaleItem = locale, DesignTimeLocaleItem = designTimeLocaleItem });
                 }
             }
 
@@ -92,13 +93,13 @@ namespace WPFLocales.Powershell
             var localeFile = _localizationInfo.LocalesDirectory.AddFile(localeFileName, localeFileText);
             WriteLine("Locale file created");
 
-
             //create design time locale file
             var designTimeLocaleFileName = string.Format("{0}DesignTimeLocale.cs", locale.Key);
             var designTimeLocaleFileText = TemplatesHelper.GenerateDesignTimeLocaleFileText(locale.Key, locale.Title, _localizationInfo.Project.GetRootNamespace(), _localizationInfo.LocalizationNamespace, Resources.DesignTimeDataDirectoryName, locale);
             _localizationInfo.LocalizationDesignDataDirectory.AddFile(designTimeLocaleFileName, designTimeLocaleFileText);
             WriteLine("Design time locale created");
 
+            //open locale file in VisualStudio
             var fullPath = localeFile.GetFullPath();
             _dte.ItemOperations.OpenFile(fullPath);
 

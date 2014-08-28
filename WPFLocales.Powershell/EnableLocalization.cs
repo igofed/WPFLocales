@@ -84,6 +84,7 @@ namespace WPFLocales.Powershell
             FindLocalizationInfo();
 
             //add default locale
+            WriteLine("Adding default locale");
             var locale = new Locale { Key = DefaultLocaleKey, Title = DefaultLocaleTitle, IsDefault = true };
             AddLocale(locale);
 
