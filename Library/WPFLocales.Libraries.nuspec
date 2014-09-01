@@ -1,6 +1,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>WPFLocales.Libraries</id>
+	<title>WPFLocales libraries</title>
     <version>1.0.0</version>
     <authors>Igor Fedchun (mail@itornotit.com)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
