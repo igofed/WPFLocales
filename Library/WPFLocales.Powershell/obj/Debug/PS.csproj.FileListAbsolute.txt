@@ -1,0 +1,13 @@
+c:\users\fedchun\documents\visual studio 2013\Projects\PS\PS\bin\Debug\PS.dll
+c:\users\fedchun\documents\visual studio 2013\Projects\PS\PS\bin\Debug\PS.pdb
+c:\users\fedchun\documents\visual studio 2013\Projects\PS\PS\bin\Debug\System.Management.Automation.dll
+c:\users\fedchun\documents\visual studio 2013\Projects\PS\PS\obj\Debug\PS.csprojResolveAssemblyReference.cache
+c:\users\fedchun\documents\visual studio 2013\Projects\PS\PS\obj\Debug\PS.dll
+c:\users\fedchun\documents\visual studio 2013\Projects\PS\PS\obj\Debug\PS.pdb
+D:\Development\PS\PS\bin\Debug\PS.dll
+D:\Development\PS\PS\bin\Debug\PS.pdb
+D:\Development\PS\PS\obj\Debug\PS.csprojResolveAssemblyReference.cache
+D:\Development\PS\PS\obj\Debug\PS.Properties.Resources.resources
+D:\Development\PS\PS\obj\Debug\PS.csproj.GenerateResource.Cache
+D:\Development\PS\PS\obj\Debug\PS.dll
+D:\Development\PS\PS\obj\Debug\PS.pdb

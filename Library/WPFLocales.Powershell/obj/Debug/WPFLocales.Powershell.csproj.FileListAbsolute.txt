@@ -1,0 +1,9 @@
+D:\Development\WPFLocales\WPFLocales.Powershell\obj\Debug\WPFLocales.Powershell.csprojResolveAssemblyReference.cache
+D:\Development\WPFLocales\WPFLocales.Powershell\obj\Debug\WPFLocales.Powershell.csproj.GenerateResource.Cache
+D:\Development\WPFLocales\WPFLocales.Powershell\bin\Debug\WpfLocales.Model.dll
+D:\Development\WPFLocales\WPFLocales.Powershell\bin\Debug\WpfLocales.Model.pdb
+D:\Development\WPFLocales\WPFLocales.Powershell\bin\Debug\WPFLocales.Powershell.dll
+D:\Development\WPFLocales\WPFLocales.Powershell\bin\Debug\WPFLocales.Powershell.pdb
+D:\Development\WPFLocales\WPFLocales.Powershell\obj\Debug\WPFLocales.Powershell.Properties.Resources.resources
+D:\Development\WPFLocales\WPFLocales.Powershell\obj\Debug\WPFLocales.Powershell.dll
+D:\Development\WPFLocales\WPFLocales.Powershell\obj\Debug\WPFLocales.Powershell.pdb

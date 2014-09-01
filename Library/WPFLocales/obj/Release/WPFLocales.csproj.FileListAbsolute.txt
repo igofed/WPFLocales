@@ -1,0 +1,4 @@
+D:\Development\eas-client\src\WPFLocales\bin\Release\WPFLocales.dll
+D:\Development\eas-client\src\WPFLocales\bin\Release\WPFLocales.pdb
+D:\Development\eas-client\src\WPFLocales\obj\Release\WPFLocales.dll
+D:\Development\eas-client\src\WPFLocales\obj\Release\WPFLocales.pdb

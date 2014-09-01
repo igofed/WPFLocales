@@ -1,0 +1,12 @@
+D:\Development\WPFLocales\WPFLocales\bin\Debug\WPFLocales.dll
+D:\Development\WPFLocales\WPFLocales\bin\Debug\WPFLocales.pdb
+D:\Development\WPFLocales\WPFLocales\obj\Debug\WPFLocales.csprojResolveAssemblyReference.cache
+D:\Development\WPFLocales\WPFLocales\obj\Debug\WPFLocales.dll
+D:\Development\WPFLocales\WPFLocales\obj\Debug\WPFLocales.pdb
+D:\Development\eas-client\src\WPFLocales\bin\Debug\WPFLocales.dll
+D:\Development\eas-client\src\WPFLocales\bin\Debug\WPFLocales.pdb
+D:\Development\eas-client\src\WPFLocales\obj\Debug\WPFLocales.csprojResolveAssemblyReference.cache
+D:\Development\eas-client\src\WPFLocales\obj\Debug\WPFLocales.dll
+D:\Development\eas-client\src\WPFLocales\obj\Debug\WPFLocales.pdb
+D:\Development\WPFLocales\WPFLocales\bin\Debug\WpfLocales.Model.dll
+D:\Development\WPFLocales\WPFLocales\bin\Debug\WpfLocales.Model.pdb

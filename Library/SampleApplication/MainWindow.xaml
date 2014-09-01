@@ -1,0 +1,47 @@
+﻿<Window x:Class="SampleApplication.MainWindow" Name="Window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sampleApplication="clr-namespace:SampleApplication"
+        xmlns:lk="clr-namespace:SampleApplication"
+        xmlns:l="clr-namespace:WPFLocales.View;assembly=WPFLocales"
+        xmlns:locales="clr-namespace:WPFLocales;assembly=WPFLocales"
+        Title="MainWindow" Width="300" Height="200"
+        
+        locales:Localization.DesignTimeLocale="RU"
+        
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        d:DataContext="{d:DesignInstance sampleApplication:ViewModel, IsDesignTimeCreatable=True}">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <Label>
+                <Label.Content>
+                    <Binding Path="State">
+                        <Binding.Converter>
+                            <sampleApplication:StateToTextConverter FormatKey="{x:Static lk:LocaleKeys+SampleApplication.StateLabelContentFormat}"/>
+                        </Binding.Converter>
+                    </Binding>
+                </Label.Content>
+            </Label>
+            <Label Content="{Binding State, Converter={l:Formatter {x:Static lk:LocaleKeys+SampleApplication.StateLabelContentFormat}}}"/>
+
+            <Button Content="{l:LocalizableText Key={x:Static lk:LocaleKeys+SampleApplication.ChangeStateButtonContent}}" Command="{Binding ChangeStateCommand}"/>
+            <ListView ItemsSource="{Binding States}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{l:LocalizableText Key={x:Static lk:LocaleKeys+SampleApplication.StateLabelContent}}"/>
+                            <Label Content="{Binding Converter={sampleApplication:StateToTextConverter}}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{l:LocalizableText Key={x:Static lk:LocaleKeys+SampleApplication.LocaleLabelContent}}"/>
+                <ComboBox ItemsSource="{Binding Locales}" SelectedItem="{Binding CurrentLocale, Mode=TwoWay}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
