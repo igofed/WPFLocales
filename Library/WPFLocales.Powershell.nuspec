@@ -1,0 +1,15 @@
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>WPFLocales.Powershell</id>
+	<title>WPFLocales PowerShell extensions</title>
+    <version>1.0.0</version>
+    <authors>Igor Fedchun (mail@itornotit.com)</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>PowerShell extension for WPFLocales</description>
+  </metadata>
+  <files>
+    <file src="WPFLocales.Powershell\bin\Release\WPFLocales.Powershell.dll" target="tools" />
+	<file src="WPFLocales.Powershell\bin\Release\WpfLocales.Model.dll" target="tools" />
+	<file src="WPFLocales.Powershell\init.ps1" target="tools" />
+  </files>
+</package>
