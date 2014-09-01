@@ -1,5 +1,0 @@
-D:\Development\WPFLocales\WpfLocales.Model\bin\Debug\WpfLocales.Model.dll
-D:\Development\WPFLocales\WpfLocales.Model\bin\Debug\WpfLocales.Model.pdb
-D:\Development\WPFLocales\WpfLocales.Model\obj\Debug\WpfLocales.Model.csprojResolveAssemblyReference.cache
-D:\Development\WPFLocales\WpfLocales.Model\obj\Debug\WpfLocales.Model.dll
-D:\Development\WPFLocales\WpfLocales.Model\obj\Debug\WpfLocales.Model.pdb
