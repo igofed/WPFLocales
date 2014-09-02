@@ -5,6 +5,9 @@
     <version>1.0.0</version>
     <authors>Igor Fedchun (mail@itornotit.com)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<licenseUrl>https://github.com/igofed/WPFLocales/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/igofed/WPFLocales</projectUrl>
+	<iconUrl>https://github.com/igofed/WPFLocales/blob/master/Library/icon.png</iconUrl>
     <description>PowerShell extension for WPFLocales</description>
   </metadata>
   <files>

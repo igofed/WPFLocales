@@ -6,6 +6,9 @@
     <authors>Igor Fedchun (mail@itornotit.com)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Library for localization of WPF applications</description>
+	<licenseUrl>https://github.com/igofed/WPFLocales/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/igofed/WPFLocales</projectUrl>
+	<iconUrl>https://github.com/igofed/WPFLocales/blob/master/Library/icon.png</iconUrl>
 	<dependencies>
       <dependency id="WPFLocales.Powershell"/>
     </dependencies> 
