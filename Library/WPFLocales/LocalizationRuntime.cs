@@ -91,13 +91,13 @@ namespace WPFLocales
         public static void Initialize(string currentLocale = null)
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetCustomAttributes(typeof(LocalesDirectory), false).Any()).ToArray();
-            if (assemblies.Length > 0)
+            if (assemblies.Length > 1)
                 throw new NotSupportedException(@"Two or more assemblies have ""LocalesDirectory"" attribute: " + string.Join(", ", assemblies.Select(a => a.FullName)));
 
             var assembly = assemblies[0];
             var localesDirectoryAttribute = (LocalesDirectory)assembly.GetCustomAttributes(typeof(LocalesDirectory), false).First();
-                
-                var localesDirectory = new DirectoryInfo(localesDirectoryAttribute.Value);
+
+            var localesDirectory = new DirectoryInfo(localesDirectoryAttribute.Value);
 
             if (!localesDirectory.Exists || !localesDirectory.GetFiles().Any(f => f.FullName.EndsWith(".locale")))
                 throw new NotSupportedException("Directory should exists or contain locale files (.locale)");
@@ -199,7 +199,7 @@ namespace WPFLocales
             _localizationInstance = new LocalizationImplementation();
 
             //if we here, so all steps passed and since now Locales initialized
-            IsInitialized = true;   
+            IsInitialized = true;
         }
 
         /// <summary>
