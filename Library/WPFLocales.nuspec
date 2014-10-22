@@ -2,7 +2,7 @@
   <metadata>
     <id>WPFLocales</id>
 	<title>WPFLocales</title>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <authors>Igor Fedchun (mail@itornotit.com)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Library for localization of WPF applications</description>
@@ -15,6 +15,6 @@
   </metadata>
   <files>
     <file src="WPFLocales\bin\Release\WPFLocales.dll" target="lib\net40\" />
-	<file src="WPFLocales\bin\Release\WpfLocales.Model.dll" target="lib\net40\" />
+	<file src="WPFLocales\bin\Release\WPFLocales.Model.dll" target="lib\net40\" />
   </files>
 </package>
