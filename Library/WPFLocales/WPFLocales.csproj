@@ -52,6 +52,7 @@
     <Compile Include="LocalizationDesignTime.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Utils\BindingExtensions.cs" />
+    <Compile Include="Utils\VisualChildUtils.cs" />
     <Compile Include="View\Formatter.cs" />
     <Compile Include="View\LocalizableConverter.cs" />
     <Compile Include="View\LocalizableText.cs" />

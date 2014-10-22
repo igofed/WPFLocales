@@ -1,37 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
 using WPFLocales.View;
 
 namespace WPFLocales.Utils
 {
-    static class BindingExtensions
+    internal static class BindingExtensions
     {
-        internal static IEnumerable<DependencyObject> EnumerateVisualChildren(this DependencyObject dependencyObject)
-        {
-            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(dependencyObject); i++)
-            {
-                yield return VisualTreeHelper.GetChild(dependencyObject, i);
-            }
-        }
-
-        internal static IEnumerable<DependencyObject> EnumerateVisualDescendents(this DependencyObject dependencyObject)
-        {
-            yield return dependencyObject;
-
-            foreach (var child in dependencyObject.EnumerateVisualChildren())
-            {
-                foreach (var descendent in child.EnumerateVisualDescendents())
-                {
-                    yield return descendent;
-                }
-            }
-        }
-
         internal static IEnumerable<DependencyProperty> GetDependencyProperties(this DependencyObject dependencyObject)
         {
             foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(dependencyObject, new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.All) }))
@@ -47,7 +25,7 @@ namespace WPFLocales.Utils
 
         internal static void EnumElementsWithProperties(this DependencyObject dependencyObject, Action<DependencyObject, DependencyProperty> process)
         {
-            foreach (var element in dependencyObject.EnumerateVisualDescendents())
+            foreach (var element in dependencyObject.EnumerateVisualChildrenRecoursively())
             {
                 foreach (var  property in element.GetDependencyProperties())
                 {
@@ -69,7 +47,7 @@ namespace WPFLocales.Utils
             });
         }
 
-        internal static void UpdateBindingConverterParents(this DependencyObject dependencyObject)
+        internal static void UpdateBindingConverterParents(this Control dependencyObject)
         {
             dependencyObject.EnumElementsWithProperties((element, property) =>
             {
@@ -79,7 +57,8 @@ namespace WPFLocales.Utils
                     var converter = binding.Converter;
                     if (converter is LocalizableConverter)
                     {
-                        (converter as LocalizableConverter).ParentDependencyObject = element;
+                        (converter as LocalizableConverter).Parent = element;
+                        (converter as LocalizableConverter).DesignLocaleParent = dependencyObject;
                     }
                 }
                 else
@@ -90,7 +69,8 @@ namespace WPFLocales.Utils
                         var converter = multiBinding.Converter;
                         if (converter is LocalizableConverter)
                         {
-                            (converter as LocalizableConverter).ParentDependencyObject = element;
+                            (converter as LocalizableConverter).Parent = element;
+                            (converter as LocalizableConverter).DesignLocaleParent = dependencyObject;
                         }
                     }
                 }

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using WPFLocales.DesignTime;
 using WPFLocales.Utils;
 using WPFLocales.View;
@@ -28,49 +26,44 @@ namespace WPFLocales
         }
         private static void OnDesignTimeLocalePropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            try
+            if (!DesignerProperties.GetIsInDesignMode(dependencyObject))
+                return;
+
+            var control = dependencyObject as Control;
+            if (control == null)
+                return;
+            
+            control.Unloaded += OnControlUnloaded;
+
+            //here need to check if locales loaded
+            if (_designTimeLocaleValues == null || _designTimeLocaleValues.Count == 0)
             {
-                if (!DesignerProperties.GetIsInDesignMode(dependencyObject))
-                    return;
-
-                var control = dependencyObject as Control;
-                if (control == null)
-                    return;
-
-                //here need to check if locales loaded
-                if (!_isLocalesLoaded)
-                {
-                    var locales = GetAllLocales().ToArray();
-                    var values = locales.ToDictionary(l => l.Key, l => l.Values);
-                    _designTimeLocaleValues = values;
-
-                    _isLocalesLoaded = true;
-                }
-
-                var newLocale = (string)dependencyPropertyChangedEventArgs.NewValue;
-                //need to store locale for each control
-                DesignTimeLocales[control] = newLocale;
-
-                //on loading process we have no access to full XAML tree
-                //so need check for IsLoaded and subscribe if need
-                if (control.IsLoaded)
-                {
-                    //if current control is loaded, then binding's converters's parents already setted
-                    //and we need only trigger bindings to update their targets
-                    dependencyObject.UpdateBindingTargets();
-                    //udpate all localized texts
-                    UpdateLocalizedTextsForControl(control);
-                }
-                else
-                {
-                    control.Loaded += OnControlLoaded;
-                    control.Unloaded += OnControlUnloaded;
-                }
+                var locales = GetAllLocales().ToArray();
+                var values = locales.ToDictionary(l => l.Key, l => l.Values);
+                _designTimeLocaleValues = values;
             }
-            catch (Exception e)
+
+            var newLocale = (string)dependencyPropertyChangedEventArgs.NewValue;
+            //need to store locale for each control
+            DesignTimeLocales[control] = newLocale;
+
+            //on loading process we have no access to full XAML tree
+            //so need check for IsLoaded and subscribe if need
+            if (control.IsLoaded)
             {
-                Log.Info(e.ToString());
-                throw;
+                //find all registered localizable texts for control and set their's locale parent
+                FindRegisteredLocalizableTextParents(control);
+                //udpate all localized texts
+                UpdateLocalizedTextsForControl(control);
+
+                //update LocalizableConverter parents for design time work
+                control.UpdateBindingConverterParents();
+                //update binding's targets for requesting new values
+                control.UpdateBindingTargets();
+            }
+            else
+            {
+                control.Loaded += OnControlLoaded;
             }
         }
 
@@ -83,17 +76,23 @@ namespace WPFLocales
             //unregister from loaded event
             control.Loaded -= OnControlLoaded;
 
+            //find all registered localizable texts for control and set their's locale parent
+            FindRegisteredLocalizableTextParents(control);
+            //udpate all localized texts
+            UpdateLocalizedTextsForControl(control);
+
             //update LocalizableConverter parents for design time work
             control.UpdateBindingConverterParents();
             //update binding's targets for requesting new values
             control.UpdateBindingTargets();
-            //udpate all localized texts
-            UpdateLocalizedTextsForControl(control);
         }
 
         private static void OnControlUnloaded(object sender, RoutedEventArgs e)
         {
             var control = sender as Control;
+            if (control == null)
+                return;
+
             control.Unloaded -= OnControlUnloaded;
 
             DesignTimeLocales.Remove(control);
@@ -113,47 +112,30 @@ namespace WPFLocales
             return types;
         }
 
-        //specifies if locales already loaded
-        private static bool _isLocalesLoaded;
+
         //locale dictionaries for each locale parent
         private static IDictionary<string, IDictionary<string, IDictionary<string, string>>> _designTimeLocaleValues;
-        //locale parent of each control, that uses localized strings
-        private static readonly Dictionary<DependencyObject, Control> DesignTimeLocaleParents = new Dictionary<DependencyObject, Control>();
         //locales per each locale parent
         private static readonly Dictionary<Control, string> DesignTimeLocales = new Dictionary<Control, string>();
+
         //all localized texts of each control
         private static readonly Dictionary<Control, List<LocalizableText>> ControlsTexts = new Dictionary<Control, List<LocalizableText>>();
         //localized text waiting to be registered
-        private static readonly Dictionary<DependencyObject, LocalizableText> WaitingForRegister = new Dictionary<DependencyObject, LocalizableText>();
+        private static readonly Dictionary<DependencyObject, LocalizableText> RegisteredLocalizableTexts = new Dictionary<DependencyObject, LocalizableText>();
 
 
         //returns localized text for element and localization key
-        internal static string GetTextByLocalizationKey(DependencyObject element, Enum localicationKey)
+        internal static string GetTextByLocalizationKey(Control localeParent, Enum localicationKey)
         {
-            //can occur for Converter which FormatKey was changed
-            //just need reload designer for settings them back
-            if (element == null)
-                return "Please reload designer";
-
-            //looking for element's parent with setted locale
-            Control localeParent;
-            if (!DesignTimeLocaleParents.TryGetValue(element, out localeParent))
-            {
-                localeParent = FindDesignTimeLocaleParent(element);
-                if (localeParent != null)
-                    DesignTimeLocaleParents[element] = localeParent;
-            }
-
-            //no such parent
             if (localeParent == null)
-                return "Design time locale didn't specified";
+                return "No design time locale specified";
 
             var locale = DesignTimeLocales[localeParent];
             var groupKey = localicationKey.GetType().Name;
             var itemKey = localicationKey.ToString();
 
             //looking for item in dictionary
-            var item = "No locale available or design time locale didn't specified";
+            var item = "No such locale available";
             if (_designTimeLocaleValues.ContainsKey(locale))
             {
                 var groups = _designTimeLocaleValues[locale];
@@ -169,37 +151,34 @@ namespace WPFLocales
             return item;
         }
 
+
         //registers LocalizableText to waiting collection for processing after parent control updated
         internal static void RegisterLocalizableTextForElement(LocalizableText localizableText, DependencyObject element)
         {
-            WaitingForRegister.Add(element, localizableText);
+            RegisteredLocalizableTexts.Add(element, localizableText);
         }
 
-
         //registers all waiting controls 
-        private static void RegisterWaitingForRegister()
+        private static void FindRegisteredLocalizableTextParents(Control control)
         {
-            if (!WaitingForRegister.Any())
+            if (!RegisteredLocalizableTexts.Any())
                 return;
 
-            var waiting = WaitingForRegister.ToList();
-            foreach (var keyValuePair in waiting)
-            {
-                var parent = FindDesignTimeLocaleParent(keyValuePair.Key);
-                if (parent == null) continue;
+            ControlsTexts[control] = new List<LocalizableText>();
 
-                if (!ControlsTexts.ContainsKey(parent))
-                    ControlsTexts[parent] = new List<LocalizableText>();
-                ControlsTexts[parent].Add(keyValuePair.Value);
-                WaitingForRegister.Remove(keyValuePair.Key);
+            foreach (var element in control.EnumerateVisualChildrenRecoursively().Where(e => RegisteredLocalizableTexts.ContainsKey(e)))
+            {
+                var localizableText = RegisteredLocalizableTexts[element];
+                localizableText.DesignLocaleParent = control;
+                ControlsTexts[control].Add(localizableText);
+
+                RegisteredLocalizableTexts.Remove(element);
             }
         }
 
         //update all registered localizedtext with registering waiting before
         private static void UpdateLocalizedTextsForControl(Control control)
         {
-            RegisterWaitingForRegister();
-
             List<LocalizableText> texts;
             if (!ControlsTexts.TryGetValue(control, out texts)) return;
 
@@ -207,21 +186,6 @@ namespace WPFLocales
             {
                 localizableText.UpdateTarget();
             }
-        }
-
-        //finds parent control wich locale specified
-        private static Control FindDesignTimeLocaleParent(DependencyObject element)
-        {
-            var currentElement = element;
-            do
-            {
-                if (currentElement is Control && DesignTimeLocales.ContainsKey(currentElement as Control))
-                {
-                    return currentElement as Control;
-                }
-            } while ((currentElement = VisualTreeHelper.GetParent(currentElement)) != null);
-
-            return null;
         }
     }
 }

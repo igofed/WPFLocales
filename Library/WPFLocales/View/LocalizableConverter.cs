@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Markup;
 using WPFLocales.Utils;
@@ -13,20 +14,26 @@ namespace WPFLocales.View
         /// <summary>
         /// FormatKey for converted value
         /// </summary>
-        public Enum FormatKey { get { return _formatKey; } set { _formatKey = value; if(ParentDependencyObject != null) ParentDependencyObject.UpdateBindingTargets(); } }
-        private Enum _formatKey;
+        public Enum FormatKey
+        {
+            get { return _formatKey; }
+            set { _formatKey = value; if(Parent != null) Parent.UpdateBindingTargets(); }
+        }
 
-        /// <summary>
-        /// Element which is parent of Binding which uses current converter
-        /// </summary>
-        internal DependencyObject ParentDependencyObject { get; set; }
+
+        internal Control DesignLocaleParent { get; set; }
+        internal DependencyObject Parent { get; set; }
+
 
         private readonly bool _isInDesignMode;
+        private Enum _formatKey;
+
 
         protected LocalizableConverter()
         {
             _isInDesignMode = DesignerProperties.GetIsInDesignMode(new DependencyObject());
         }
+
 
         public abstract object Convert(object value, Type targetType, object parameter, CultureInfo culture);
         public abstract object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture);
@@ -36,6 +43,7 @@ namespace WPFLocales.View
             return this;
         }
 
+
         /// <summary>
         /// Return localized string for current key
         /// </summary>
@@ -44,11 +52,11 @@ namespace WPFLocales.View
         /// <returns></returns>
         protected string GetLocalizedString(Enum key, bool withFormating = true)
         {
-            var text = _isInDesignMode ? Localization.GetTextByLocalizationKey(ParentDependencyObject, key) : Localization.GetTextByLocalizationKey(key);
+            var text = _isInDesignMode ? Localization.GetTextByLocalizationKey(DesignLocaleParent, key) : Localization.GetTextByLocalizationKey(key);
 
             if (withFormating && FormatKey != null)
             {
-                var format = _isInDesignMode ? Localization.GetTextByLocalizationKey(ParentDependencyObject, FormatKey) : Localization.GetTextByLocalizationKey(FormatKey);
+                var format = _isInDesignMode ? Localization.GetTextByLocalizationKey(DesignLocaleParent, FormatKey) : Localization.GetTextByLocalizationKey(FormatKey);
                 text = string.Format(format, text);
             }
 

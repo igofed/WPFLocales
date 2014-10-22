@@ -7,7 +7,7 @@ namespace WPFLocales
     {
         public static void Info(params string[] messages)
         {
-            var file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Protei", "WpfLocales", "log.txt");
+            var file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WpfLocales", "log.txt");
             using (var writer = new StreamWriter(file, true))
             {
                 foreach (var message in messages)

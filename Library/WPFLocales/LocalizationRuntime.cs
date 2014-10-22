@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Xml.Serialization;
+using WpfLocales.Model.Xml;
 using WPFLocales.Exceptions;
 using WPFLocales.Model;
-using WpfLocales.Model.Xml;
 using WPFLocales.Utils;
 
 namespace WPFLocales
