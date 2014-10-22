@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -79,6 +80,18 @@ namespace WPFLocales.Utils
                     if (converter is LocalizableConverter)
                     {
                         (converter as LocalizableConverter).ParentDependencyObject = element;
+                    }
+                }
+                else
+                {
+                    var multiBinding = BindingOperations.GetMultiBinding(element, property);
+                    if (multiBinding != null)
+                    {
+                        var converter = multiBinding.Converter;
+                        if (converter is LocalizableConverter)
+                        {
+                            (converter as LocalizableConverter).ParentDependencyObject = element;
+                        }
                     }
                 }
             });

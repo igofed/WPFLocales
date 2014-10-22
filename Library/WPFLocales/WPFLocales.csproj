@@ -50,6 +50,7 @@
     <Compile Include="DesignTime\DesignTimeLocale.cs" />
     <Compile Include="Exceptions\LocalizationKeyNotFoundException.cs" />
     <Compile Include="LocalizationDesignTime.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Utils\BindingExtensions.cs" />
     <Compile Include="View\Formatter.cs" />
     <Compile Include="View\LocalizableConverter.cs" />
