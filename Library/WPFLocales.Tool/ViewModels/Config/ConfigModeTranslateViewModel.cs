@@ -1,21 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using WPFLocales.Tool.Models;
 using WPFLocales.Tool.ViewModels.Common;
 
-namespace WPFLocales.Tool.ViewModels
+namespace WPFLocales.Tool.ViewModels.Config
 {
-    internal class ConfigModeViewModel : ViewModelBase
-    {
-        public event Action Completed = () => { };
-
-        protected void RaiseCompleted()
-        {
-            Completed();
-        }
-    }
-
     internal class ConfigModeTranslateViewModel : ConfigModeViewModel
     {
         public string DefaultLocalePath
@@ -79,23 +68,44 @@ namespace WPFLocales.Tool.ViewModels
         private bool CanTranslateCommandExecute()
         {
             return File.Exists(DefaultLocalePath) && File.Exists(NewLocalePath)
-                && Path.GetExtension(DefaultLocalePath) == ".locale" && Path.GetExtension(NewLocalePath) == ".locale";
+                   && Path.GetExtension(DefaultLocalePath) == ".locale" && Path.GetExtension(NewLocalePath) == ".locale";
         }
 
         private void DefaultLocaleFindCommandExecute()
         {
             var path = FileDialogUtils.FindLocaleFile();
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            var defaultLocaleContainer = LocaleContainer.ReadFromFile(path);
+            if (!defaultLocaleContainer.Locale.IsDefault)
+            {
+                MessageBox.Show("Default locale is not marked as default", "Default locale error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             if (path == NewLocalePath)
             {
                 MessageBox.Show("Default and new locale shoud be different", "Locale selecting error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
             DefaultLocalePath = path;
         }
 
         private void NewLocaleFindCommandExecute()
         {
             var path = FileDialogUtils.FindLocaleFile();
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            var newLocale = LocaleContainer.ReadFromFile(path);
+            if (newLocale.Locale.IsDefault)
+            {
+                MessageBox.Show("New locale marked as default", "New locale error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             if (path == DefaultLocalePath)
             {
                 MessageBox.Show("Default and new locale shoud be different", "Locale selecting error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -108,10 +118,5 @@ namespace WPFLocales.Tool.ViewModels
         {
             NewLocalePath = FileDialogUtils.CreateLocaleFile();
         }
-    }
-
-    internal class ConfigModeEditViewModel : ConfigModeViewModel
-    {
-        public DelegateCommand EditCommand { get; set; }
     }
 }

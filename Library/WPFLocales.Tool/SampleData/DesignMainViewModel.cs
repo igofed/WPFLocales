@@ -1,4 +1,5 @@
 ﻿using WPFLocales.Tool.ViewModels;
+using WPFLocales.Tool.ViewModels.Config;
 
 namespace WPFLocales.Tool.SampleData
 {

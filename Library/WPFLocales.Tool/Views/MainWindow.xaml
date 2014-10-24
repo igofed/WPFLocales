@@ -8,7 +8,7 @@
         xmlns:sampleData="clr-namespace:WPFLocales.Tool.SampleData"
         xmlns:translate="clr-namespace:WPFLocales.Tool.ViewModels.Translate"
         xmlns:views="clr-namespace:WPFLocales.Tool.Views"
-        xmlns:viewModels="clr-namespace:WPFLocales.Tool.ViewModels"
+        xmlns:config="clr-namespace:WPFLocales.Tool.ViewModels.Config"
         d:DataContext="{d:DesignInstance sampleData:DesignMainViewModel, IsDesignTimeCreatable=true}"
         
         Title="WPFLocales.Tool" Icon="/WPFLocales.Tool;component/icon.ico">
@@ -26,7 +26,7 @@
                           Header="Configuration" 
                           HorizontalAlignment="Center" VerticalAlignment="Center">
                     <GroupBox.Resources>
-                        <DataTemplate DataType="{x:Type viewModels:ConfigModeEditViewModel}">
+                        <DataTemplate DataType="{x:Type config:ConfigModeEditViewModel}">
                             <Grid Margin="5">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -52,7 +52,7 @@
                             </Grid>
                         </DataTemplate>
                         
-                        <DataTemplate DataType="{x:Type viewModels:ConfigModeTranslateViewModel}">
+                        <DataTemplate DataType="{x:Type config:ConfigModeTranslateViewModel}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>

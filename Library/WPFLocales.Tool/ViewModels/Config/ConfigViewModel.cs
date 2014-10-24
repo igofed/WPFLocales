@@ -1,9 +1,14 @@
-﻿using WPFLocales.Tool.ViewModels.Common;
+﻿using System;
+using WPFLocales.Tool.Models;
+using WPFLocales.Tool.ViewModels.Common;
 
-namespace WPFLocales.Tool.ViewModels
+namespace WPFLocales.Tool.ViewModels.Config
 {
     internal class ConfigViewModel : ViewModelBase
     {
+        public event Action<LocaleContainer> EditConfigured = e => { };
+        public event Action<LocaleContainer, LocaleContainer> TranslateConfigured = (d, n) => { };
+ 
         public bool IsEdit
         {
             get { return _isEdit; }
@@ -40,9 +45,22 @@ namespace WPFLocales.Tool.ViewModels
         public ConfigViewModel()
         {
             _editMode = new ConfigModeEditViewModel();
+            _editMode.Completed += OnEditModeConfigCompleted;
             _translateMode = new ConfigModeTranslateViewModel();
+            _translateMode.Completed += OnTranslateModeConfigCompleted;
 
             IsTranslate = true;
+        }
+
+
+        private void OnTranslateModeConfigCompleted()
+        {
+            TranslateConfigured(_translateMode.DefauleLocale, _translateMode.NewLocale);
+        }
+
+        private void OnEditModeConfigCompleted()
+        {
+            EditConfigured(null);
         }
     }
 }

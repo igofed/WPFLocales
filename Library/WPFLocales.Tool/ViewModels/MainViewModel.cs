@@ -1,6 +1,6 @@
-﻿using System.IO;
-using WPFLocales.Tool.Models;
+﻿using WPFLocales.Tool.Models;
 using WPFLocales.Tool.ViewModels.Common;
+using WPFLocales.Tool.ViewModels.Config;
 
 namespace WPFLocales.Tool.ViewModels
 {
@@ -27,13 +27,25 @@ namespace WPFLocales.Tool.ViewModels
         public MainViewModel(LocaleContainer defaultLocale = null, LocaleContainer newLocale = null)
         {
             Config = new ConfigViewModel();
+            Config.EditConfigured += OnEditConfigured;
+            Config.TranslateConfigured += OnTranslateConfigured;
 
             InitCommands();
         }
 
-        private void InitCommands()
+        private void OnTranslateConfigured(LocaleContainer arg1, LocaleContainer arg2)
+        {
+           
+        }
+
+        private void OnEditConfigured(LocaleContainer obj)
         {
             
+        }
+
+        private void InitCommands()
+        {
+
         }
     }
 
