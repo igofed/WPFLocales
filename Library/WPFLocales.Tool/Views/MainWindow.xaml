@@ -9,6 +9,7 @@
         xmlns:translate="clr-namespace:WPFLocales.Tool.ViewModels.Translate"
         xmlns:views="clr-namespace:WPFLocales.Tool.Views"
         xmlns:config="clr-namespace:WPFLocales.Tool.ViewModels.Config"
+        xmlns:edit="clr-namespace:WPFLocales.Tool.ViewModels.Edit"
         d:DataContext="{d:DesignInstance sampleData:DesignMainViewModel, IsDesignTimeCreatable=true}"
         
         Title="WPFLocales.Tool" Icon="/WPFLocales.Tool;component/icon.ico">
@@ -16,6 +17,9 @@
     <Window.Resources>
         <DataTemplate DataType="{x:Type translate:TranslateLocaleViewModel}">
             <views:TranslateLocaleView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type edit:EditLocaleViewModel}">
+            <views:EditLocaleView/>
         </DataTemplate>
     </Window.Resources>
 
@@ -41,14 +45,15 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Label Grid.Column="0" Content="Locale: "/>
-                                    <TextBox Grid.Column="1"/>
-                                    <Button Grid.Column="2" Content="..."/>
+                                    <TextBox Grid.Column="1" Text="{Binding DefaultLocalePath, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Button Grid.Column="2" Content="..."
+                                            Command="{Binding DefaultLocaleFindCommand}"/>
                                 </Grid>
 
                                 <Button Grid.Row="1" 
                                     Content="Edit" HorizontalAlignment="Right" 
                                     Padding="5,0,5,0" Margin="0,5,0,0"
-                                    Command="{Binding TranslateDefaultLocaleFindCommand}"/>
+                                    Command="{Binding EditCommand}"/>
                             </Grid>
                         </DataTemplate>
                         

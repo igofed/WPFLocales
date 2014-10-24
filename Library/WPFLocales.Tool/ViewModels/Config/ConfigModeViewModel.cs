@@ -12,9 +12,4 @@ namespace WPFLocales.Tool.ViewModels.Config
             Completed();
         }
     }
-
-    internal class ConfigModeEditViewModel : ConfigModeViewModel
-    {
-        public DelegateCommand EditCommand { get; set; }
-    }
 }

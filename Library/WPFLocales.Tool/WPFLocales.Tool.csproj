@@ -58,13 +58,21 @@
     </ApplicationDefinition>
     <Compile Include="Models\FileDialogUtils.cs" />
     <Compile Include="Models\LocaleContainer.cs" />
+    <Compile Include="ViewModels\Config\ConfigModeEditViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigModeTranslateViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigViewModel.cs" />
     <Compile Include="ViewModels\LocaleWorkViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigModeViewModel.cs" />
+    <Compile Include="Views\EditLocaleView.xaml.cs">
+      <DependentUpon>EditLocaleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TranslateLocaleView.xaml.cs">
       <DependentUpon>TranslateLocaleView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\EditLocaleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
