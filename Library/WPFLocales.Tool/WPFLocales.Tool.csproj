@@ -56,6 +56,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\LocaleContainer.cs" />
+    <Compile Include="ViewModels\LocaleWorkViewModel.cs" />
+    <Compile Include="Views\TranslateLocaleView.xaml.cs">
+      <DependentUpon>TranslateLocaleView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -66,12 +71,20 @@
     </Compile>
     <Compile Include="SampleData\DesignMainViewModel.cs" />
     <Compile Include="ViewModels\Common\RelayCommand.cs" />
+    <Compile Include="ViewModels\Edit\EditLocaleViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\Common\ViewModelBase.cs" />
+    <Compile Include="ViewModels\Translate\TranslateGroupViewModel.cs" />
+    <Compile Include="ViewModels\Translate\TranslateItemViewModel.cs" />
+    <Compile Include="ViewModels\Translate\TranslateLocaleViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\TranslateLocaleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
