@@ -58,6 +58,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\FileDialogUtils.cs" />
     <Compile Include="Models\LocaleContainer.cs" />
+    <Compile Include="SampleData\DesignTranslateLocaleViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigModeEditViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigModeTranslateViewModel.cs" />
     <Compile Include="ViewModels\Config\ConfigViewModel.cs" />

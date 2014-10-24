@@ -1,15 +1,15 @@
 ﻿<Window x:Class="WPFLocales.Tool.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:translate="clr-namespace:WPFLocales.Tool.ViewModels.Translate"
+        xmlns:views="clr-namespace:WPFLocales.Tool.Views"
+        xmlns:config="clr-namespace:WPFLocales.Tool.ViewModels.Config"
+        xmlns:edit="clr-namespace:WPFLocales.Tool.ViewModels.Edit"
         
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:sampleData="clr-namespace:WPFLocales.Tool.SampleData"
-        xmlns:translate="clr-namespace:WPFLocales.Tool.ViewModels.Translate"
-        xmlns:views="clr-namespace:WPFLocales.Tool.Views"
-        xmlns:config="clr-namespace:WPFLocales.Tool.ViewModels.Config"
-        xmlns:edit="clr-namespace:WPFLocales.Tool.ViewModels.Edit"
         d:DataContext="{d:DesignInstance sampleData:DesignMainViewModel, IsDesignTimeCreatable=true}"
         
         Title="WPFLocales.Tool" Icon="/WPFLocales.Tool;component/icon.ico">
