@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFLocales.Powershell", "WP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFLocales.Model", "WpfLocales.Model\WPFLocales.Model.csproj", "{A18F2AEB-162F-4CE2-A710-BDFD259909CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFLocales.Tool", "WPFLocales.Tool\WPFLocales.Tool.csproj", "{0FB6B393-0214-4AE4-B090-17929552D95C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A18F2AEB-162F-4CE2-A710-BDFD259909CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A18F2AEB-162F-4CE2-A710-BDFD259909CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A18F2AEB-162F-4CE2-A710-BDFD259909CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FB6B393-0214-4AE4-B090-17929552D95C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FB6B393-0214-4AE4-B090-17929552D95C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FB6B393-0214-4AE4-B090-17929552D95C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FB6B393-0214-4AE4-B090-17929552D95C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
