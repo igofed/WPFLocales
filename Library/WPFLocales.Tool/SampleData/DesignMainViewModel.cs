@@ -6,7 +6,8 @@ namespace WPFLocales.Tool.SampleData
     {
         public DesignMainViewModel()
         {
-            WorkMode = ViewModels.WorkMode.Select;
+            WorkMode = ViewModels.WorkMode.Config;
+            Config = new ConfigViewModel();
         }
     }
 }

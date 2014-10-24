@@ -29,9 +29,9 @@ namespace WPFLocales.Tool
             try
             {
                 if (e.Args.Length >= 1)
-                    defaultLocale = new LocaleContainer { Locale = ReadLocale(e.Args[0]), Path = e.Args[0] };
+                    defaultLocale = LocaleContainer.ReadFromFile(e.Args[0]); 
                 if (e.Args.Length == 2)
-                    newLocale = new LocaleContainer { Locale = ReadLocale(e.Args[1]), Path = e.Args[1] };
+                    newLocale = LocaleContainer.ReadFromFile(e.Args[1]); 
             }
             catch (Exception ex)
             {
@@ -44,21 +44,6 @@ namespace WPFLocales.Tool
 
             Current.MainWindow = window;
             Current.MainWindow.Show();
-        }
-
-        private XmlLocale ReadLocale(string path)
-        {
-            if (Path.GetExtension(path) != ".locale")
-                throw new FileFormatException("Locale file should have .locale extension");
-            if (!File.Exists(path))
-                throw new FileNotFoundException(string.Format(@"Locale file didn't found at ""{0}""", path));
-
-            using (var stream = new FileStream(path, FileMode.Open))
-            {
-                var serializer = new XmlSerializer(typeof(XmlLocale));
-                var locale = (XmlLocale)serializer.Deserialize(stream);
-                return locale;
-            }
         }
     }
 }

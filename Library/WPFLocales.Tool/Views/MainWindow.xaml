@@ -8,6 +8,7 @@
         xmlns:sampleData="clr-namespace:WPFLocales.Tool.SampleData"
         xmlns:translate="clr-namespace:WPFLocales.Tool.ViewModels.Translate"
         xmlns:views="clr-namespace:WPFLocales.Tool.Views"
+        xmlns:viewModels="clr-namespace:WPFLocales.Tool.ViewModels"
         d:DataContext="{d:DesignInstance sampleData:DesignMainViewModel, IsDesignTimeCreatable=true}"
         
         Title="WPFLocales.Tool" Icon="/WPFLocales.Tool;component/icon.ico">
@@ -16,103 +17,111 @@
         <DataTemplate DataType="{x:Type translate:TranslateLocaleViewModel}">
             <views:TranslateLocaleView/>
         </DataTemplate>
-
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
 
     <Window.Template>
         <ControlTemplate>
-
             <Grid Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
-                <GroupBox Name="SelectModeGrid" 
-                          Header="Settings" 
+                <GroupBox Name="ConfigGrid" 
+                          Header="Configuration" 
                           HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Grid Width="450">
+                    <GroupBox.Resources>
+                        <DataTemplate DataType="{x:Type viewModels:ConfigModeEditViewModel}">
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" Content="Locale: "/>
+                                    <TextBox Grid.Column="1"/>
+                                    <Button Grid.Column="2" Content="..."/>
+                                </Grid>
+
+                                <Button Grid.Row="1" 
+                                    Content="Edit" HorizontalAlignment="Right" 
+                                    Padding="5,0,5,0" Margin="0,5,0,0"
+                                    Command="{Binding TranslateDefaultLocaleFindCommand}"/>
+                            </Grid>
+                        </DataTemplate>
+                        
+                        <DataTemplate DataType="{x:Type viewModels:ConfigModeTranslateViewModel}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+
+                                    <Label Grid.Column="0" Grid.Row="0" Content="Default locale: "/>
+                                    <TextBox Grid.Column="1" Grid.Row="0"
+                                             Text="{Binding DefaultLocalePath, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Button Grid.Column="2" Grid.Row="0" Content="..."
+                                            Command="{Binding DefaultLocaleFindCommand}"/>
+
+                                    <Label Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" Content="New locale: "/>
+                                    <TextBox Grid.Column="1" Grid.Row="1" Margin="0,5,0,0"
+                                             Text="{Binding NewLocalePath, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <StackPanel Grid.Column="2" Grid.Row="1" Margin="0,5,0,0" Orientation="Horizontal">
+                                        <Button Content="..."
+                                                Command="{Binding NewLocaleFindCommand}"/>
+                                        <Button Content="+"
+                                                Command="{Binding NewLocaleCreateCommand}"/>
+                                    </StackPanel >
+                                </Grid>
+
+                                <Button Grid.Row="1" 
+                                        Content="Translate" HorizontalAlignment="Right" 
+                                        Padding="5,0,5,0" Margin="0,5,0,0"
+                                        Command="{Binding TranslateCommand}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </GroupBox.Resources>
+                    
+                    <Grid Width="450" DataContext="{Binding Config}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <RadioButton Name="EditLocaleRadioButton"  Content="Edit default locale" />
-                            <RadioButton Name="TranslateLocaleRadioButton"  Content="Translate locale" Margin="10,0,0,0" IsChecked="True"/>
+                            <RadioButton Name="EditLocaleRadioButton"  Content="Edit default locale" IsChecked="{Binding IsEdit}"/>
+                            <RadioButton Name="TranslateLocaleRadioButton"  Content="Translate locale" Margin="10,0,0,0" IsChecked="{Binding IsTranslate}"/>
                         </StackPanel>
 
-                        <Grid Grid.Row="1" 
-                              Margin="5"
-                              Visibility="{Binding ElementName=EditLocaleRadioButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Label Grid.Column="0" Content="Locale: "/>
-                                <TextBox Grid.Column="1"/>
-                                <Button Grid.Column="2" Content="..."/>
-                            </Grid>
-
-                            <Button Grid.Row="1" 
-                                    Content="Edit" HorizontalAlignment="Right" 
-                                    Padding="5,0,5,0" Margin="0,5,0,0"/>
-                        </Grid>
-
-                        <Grid Grid.Row="1" Visibility="{Binding ElementName=TranslateLocaleRadioButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-
-                                <Label Grid.Column="0" Grid.Row="0" Content="Default locale: "/>
-                                <TextBox Grid.Column="1" Grid.Row="0" />
-                                <Button Grid.Column="2" Grid.Row="0" Content="..."/>
-
-                                <Label Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" Content="New locale: "/>
-                                <TextBox Grid.Column="1" Grid.Row="1" Margin="0,5,0,0"/>
-                                <StackPanel Grid.Column="2" Grid.Row="1" Margin="0,5,0,0" Orientation="Horizontal">
-                                    <Button Content="..."/>
-                                    <Button Content="+"/>
-                                </StackPanel >
-                            </Grid>
-
-
-                            <Button Grid.Row="2" 
-                                    Content="Translate" HorizontalAlignment="Right" 
-                                    Padding="5,0,5,0" Margin="0,5,0,0"/>
-                        </Grid>
+                        <ContentPresenter Grid.Row="1" Content="{Binding ConfigMode}"/>
                     </Grid>
                 </GroupBox>
 
                 <Grid Name="WorkGrid">
-                    <ContentPresenter DataContext="{Binding Work}"/>
+                    <ContentPresenter Content="{Binding Work}"/>
                 </Grid>
             </Grid>
 
             <ControlTemplate.Triggers>
-                <DataTrigger Binding="{Binding WorkMode}" Value="Select">
-                    <Setter TargetName="SelectModeGrid" Property="Visibility" Value="Visible"/>
+                <DataTrigger Binding="{Binding WorkMode}" Value="Config">
+                    <Setter TargetName="ConfigGrid" Property="Visibility" Value="Visible"/>
                     <Setter TargetName="WorkGrid" Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding WorkMode}" Value="Work">
-                    <Setter TargetName="SelectModeGrid" Property="Visibility" Value="Collapsed"/>
+                    <Setter TargetName="ConfigGrid" Property="Visibility" Value="Collapsed"/>
                     <Setter TargetName="WorkGrid" Property="Visibility" Value="Visible"/>
                 </DataTrigger>
             </ControlTemplate.Triggers>

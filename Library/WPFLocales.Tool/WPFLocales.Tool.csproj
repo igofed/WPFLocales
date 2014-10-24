@@ -56,8 +56,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\FileDialogUtils.cs" />
     <Compile Include="Models\LocaleContainer.cs" />
+    <Compile Include="ViewModels\ConfigViewModel.cs" />
     <Compile Include="ViewModels\LocaleWorkViewModel.cs" />
+    <Compile Include="ViewModels\ConfigModeViewModel.cs" />
     <Compile Include="Views\TranslateLocaleView.xaml.cs">
       <DependentUpon>TranslateLocaleView.xaml</DependentUpon>
     </Compile>
