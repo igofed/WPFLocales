@@ -27,22 +27,43 @@ namespace WPFLocales.Tool.ViewModels
 
         public MainViewModel(LocaleContainer defaultLocale = null, LocaleContainer newLocale = null)
         {
-            Config = new ConfigViewModel();
-            Config.EditConfigured += OnEditConfigured;
-            Config.TranslateConfigured += OnTranslateConfigured;
-
             InitCommands();
+
+            if (defaultLocale != null)
+            {
+                if(newLocale != null)
+                    RunTranslateMode(defaultLocale, newLocale);
+                else
+                    RunEditMode(defaultLocale);
+            }
+            else
+            {
+                Config = new ConfigViewModel();
+                Config.EditConfigured += OnEditConfigured;
+                Config.TranslateConfigured += OnTranslateConfigured;
+            }
         }
 
         private void OnTranslateConfigured(LocaleContainer defaultLocale, LocaleContainer newLocale)
         {
-           Work = new TranslateLocaleViewModel();
-           WorkMode = ViewModels.WorkMode.Work;
+            RunTranslateMode(defaultLocale, newLocale);
         }
 
         private void OnEditConfigured(LocaleContainer defaultLocale)
         {
+            RunEditMode(defaultLocale);
+        }
+
+
+        private void RunEditMode(LocaleContainer defaultLocale)
+        {
             Work = new EditLocaleViewModel();
+            WorkMode = ViewModels.WorkMode.Work;
+        }
+
+        private void RunTranslateMode(LocaleContainer defaultLocale, LocaleContainer newLocale)
+        {
+            Work = new TranslateLocaleViewModel(defaultLocale, newLocale);
             WorkMode = ViewModels.WorkMode.Work;
         }
 
