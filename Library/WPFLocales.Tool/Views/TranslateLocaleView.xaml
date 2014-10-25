@@ -8,78 +8,194 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance sampleData:DesignTranslateLocaleViewModel, IsDesignTimeCreatable=true}" d:DesignHeight="300" d:DesignWidth="700">
     <Grid Margin="5">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Groups}" Grid.IsSharedSizeScope="True">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Expander Header="{Binding Key, StringFormat={}Group KEY: {0}}" Margin="0,0,0,10" IsExpanded="True">
-                            <Grid Margin="30,0,10,0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="3,0,3,0">
+                <ItemsControl ItemsSource="{Binding Groups}" Grid.IsSharedSizeScope="True">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,3,0,0">
+                                <Expander HorizontalContentAlignment="Stretch">
+                                    <Expander.Header>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" SharedSizeGroup="GroupKey"/>
+                                                <ColumnDefinition Width="Auto" SharedSizeGroup="GroupComment"/>
+                                                <ColumnDefinition Width="Auto" SharedSizeGroup="GroupTranslated"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                                <TextBlock Text="KEY:" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Key}" Margin="5,0,0,0"/>
+                                            </StackPanel>
 
-                                <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,2">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" SharedSizeGroup="ItemKey"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
+                                                <TextBlock Text="Comment:" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Comment}" Margin="5,0,0,0"/>
+                                            </StackPanel>
 
-                                        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1,0,1,0" Margin="0,0,0,2">
-                                            <Label Content="KEY" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                        </Border>
+                                            <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="10,0,0,0">
+                                                <TextBlock Text="Translated:" FontWeight="Bold"/>
+                                                <TextBlock Margin="5,0,0,0">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0}/{1}">
+                                                            <Binding Path="TranslatedCount"/>
+                                                            <Binding Path="Items.Count"></Binding>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </StackPanel>
 
-                                        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="0,0,1,0" Margin="0,0,0,2">
-                                            <Label Content="Default value" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                        </Border>
+                                            <Border Grid.Column="3" Margin="10,0,0,0">
+                                                <Grid>
+                                                    <Image Source="/WPFLocales.Tool;component/Resources/ok.png" Width="20" Height="20" ToolTip="Translated">
+                                                        <Image.Style>
+                                                            <Style TargetType="Image">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsTranslated}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsTranslated}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
+                                                    <Image Source="/WPFLocales.Tool;component/Resources/notok.png" Width="20" Height="20" ToolTip="Not translated">
+                                                        <Image.Style>
+                                                            <Style TargetType="Image">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsTranslated}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsTranslated}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                    </Expander.Header>
+                                    <Border Margin="25,1,5,0" BorderBrush="Gray" BorderThickness="0,2,0,0" Padding="0,2,0,0">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
 
-                                        <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="0,0,1,0" Margin="0,0,0,2">
-                                            <Label Content="New value" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                        </Border>
+                                            <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,2">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" SharedSizeGroup="ItemKey"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto" SharedSizeGroup="ItemStatus"/>
+                                                    </Grid.ColumnDefinitions>
 
-                                        <Border Grid.Column="3" BorderBrush="Gray" BorderThickness="0,0,1,0" Margin="0,0,0,2">
-                                            <Label Content="Comment" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </Grid>
-                                </Border>
-                                <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}" Margin="0,1,0,0">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" SharedSizeGroup="ItemKey"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-                                                
-                                                <Border Grid.Column="0" BorderBrush="DarkGray" BorderThickness="1,0,1,0" Margin="0,2,0,0" Padding="15,0,15,0">
-                                                    <TextBlock Text="{Binding Key}"/>
-                                                </Border>
-                                                
-                                                <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1,0,1,0" Margin="0,2,0,0" Padding="15,0,15,0">
-                                                    <TextBox Text="{Binding DefaultValue}" IsReadOnly="True"/>
-                                                </Border>
-                                                
-                                                <Border Grid.Column="2" BorderBrush="DarkGray" BorderThickness="1,0,1,0" Margin="0,2,0,0" Padding="15,0,15,0">
-                                                    <TextBox Text="{Binding NewValue}"/>
-                                                </Border>
-                                                
-                                                <Border Grid.Column="3" BorderBrush="DarkGray" BorderThickness="1,0,1,0" Margin="0,2,0,0" Padding="15,0,15,0">
-                                                    <TextBox Text="{Binding Comment}" IsReadOnly="True"/>
-                                                </Border>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                                    <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1,0,1,0" Margin="0,0,0,2">
+                                                        <Label Content="KEY" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                    </Border>
+
+                                                    <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="0,0,1,0" Margin="0,0,0,2">
+                                                        <Label Content="Default value" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                    </Border>
+
+                                                    <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="0,0,1,0" Margin="0,0,0,2">
+                                                        <Label Content="New value" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                    </Border>
+
+                                                    <Border Grid.Column="3" BorderBrush="Gray" BorderThickness="0,0,1,0" Margin="0,0,0,2">
+                                                        <Label Content="Comment" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                    </Border>
+
+                                                    <Border Grid.Column="4" BorderBrush="Gray" BorderThickness="0,0,1,0" Margin="0,0,0,2">
+                                                        <Label Content="Status" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                            <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}" Margin="0,1,0,0">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="ItemKey"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="ItemStatus"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Border Grid.Column="0" BorderBrush="DarkGray" BorderThickness="1,0,1,0" Margin="0,2,0,0" Padding="15,0,15,0">
+                                                                <TextBlock Text="{Binding Key}"/>
+                                                            </Border>
+
+                                                            <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="0,0,1,0" Margin="0,2,0,0" Padding="15,0,15,0">
+                                                                <TextBox Text="{Binding DefaultValue}" IsReadOnly="True"/>
+                                                            </Border>
+
+                                                            <Border Grid.Column="2" BorderBrush="DarkGray" BorderThickness="0,0,1,0" Margin="0,2,0,0" Padding="15,0,15,0">
+                                                                <TextBox Text="{Binding NewValue, UpdateSourceTrigger=PropertyChanged}"/>
+                                                            </Border>
+
+                                                            <Border Grid.Column="3" BorderBrush="DarkGray" BorderThickness="0,0,1,0" Margin="0,2,0,0" Padding="15,0,15,0">
+                                                                <TextBox Text="{Binding Comment}" IsReadOnly="True"/>
+                                                            </Border>
+
+                                                            <Border Grid.Column="4" BorderBrush="DarkGray" BorderThickness="0,0,1,0" Margin="0,2,0,0" Padding="15,0,15,0">
+                                                                <Grid>
+                                                                    <Image Source="/WPFLocales.Tool;component/Resources/ok.png" Width="20" Height="20" ToolTip="Translated">
+                                                                        <Image.Style>
+                                                                            <Style TargetType="Image">
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding IsTranslated}" Value="True">
+                                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                                    </DataTrigger>
+                                                                                    <DataTrigger Binding="{Binding IsTranslated}" Value="False">
+                                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Image.Style>
+                                                                    </Image>
+                                                                    <Image Source="/WPFLocales.Tool;component/Resources/notok.png" Width="20" Height="20" ToolTip="Not translated">
+                                                                        <Image.Style>
+                                                                            <Style TargetType="Image">
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding IsTranslated}" Value="True">
+                                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                    </DataTrigger>
+                                                                                    <DataTrigger Binding="{Binding IsTranslated}" Value="False">
+                                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Image.Style>
+                                                                    </Image>
+                                                                </Grid>
+                                                            </Border>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Grid>
+                                    </Border>
+                                </Expander>
+                                <Border BorderBrush="Gray" BorderThickness="0,0,0,2" Margin="0,0,5,-3"/>
                             </Grid>
-                        </Expander>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </UserControl>

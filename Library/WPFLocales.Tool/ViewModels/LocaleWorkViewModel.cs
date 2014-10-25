@@ -2,8 +2,25 @@
 
 namespace WPFLocales.Tool.ViewModels
 {
-    internal class LocaleWorkViewModel : ViewModelBase
+    internal abstract class LocaleWorkViewModel : ViewModelBase
     {
+        public DelegateCommand SaveCommand { get; set; }
 
+
+        protected LocaleWorkViewModel()
+        {
+            InitCommands();
+        }
+
+
+        private void InitCommands()
+        {
+            SaveCommand = new DelegateCommand(SaveCommandExecute, CanSaveCommandExecute);
+        }
+
+
+        protected abstract void SaveCommandExecute();
+
+        protected abstract bool CanSaveCommandExecute();
     }
 }

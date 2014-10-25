@@ -9,7 +9,7 @@ namespace WPFLocales.Tool.SampleData
         {
             Groups = new ObservableCollection<TranslateGroupViewModel>
             {
-                new TranslateGroupViewModel
+                new DesignTranslateGroupViewModel
                 {
                     Key = "Group #1",
                     Items = new ObservableCollection<TranslateItemViewModel>
@@ -22,7 +22,7 @@ namespace WPFLocales.Tool.SampleData
                         new TranslateItemViewModel { Key = "Item #6", Comment = "Comment #6", DefaultValue = "Default value #6", NewValue = "Translated value #6" }
                     }
                 },
-                new TranslateGroupViewModel
+                new DesignTranslateGroupViewModel
                 {
                     Key = "Group #2",
                     Items = new ObservableCollection<TranslateItemViewModel>
@@ -37,5 +37,10 @@ namespace WPFLocales.Tool.SampleData
                 }
             };
         }
+    }
+
+    class DesignTranslateGroupViewModel : TranslateGroupViewModel
+    {
+        
     }
 }

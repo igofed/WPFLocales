@@ -116,7 +116,15 @@
                 </GroupBox>
 
                 <Grid Name="WorkGrid">
-                    <ContentPresenter Content="{Binding Work}"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <ContentPresenter Grid.Row="0" Content="{Binding Work}"/>
+                    
+                    <Button Grid.Row="1" Content="Save" Padding="10,0,10,0" HorizontalAlignment="Right" Margin="5" 
+                            Command="{Binding Work.SaveCommand}"/>
                 </Grid>
             </Grid>
 

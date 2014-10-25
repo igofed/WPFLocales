@@ -7,17 +7,17 @@ namespace WPFLocales.Tool.ViewModels.Common
 {
     internal class ViewModelBase: INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged = (s, e) => { };
 
+
+        protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(ExtractPropertyName(propertyExpression)));
+        }
 
         protected void RaisePropertyChanged(string propertyName)
         {
-            var propertyChanged = this.PropertyChanged;
-
-            if (propertyChanged != null)
-            {
-                propertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         protected bool Set<T>(ref T backingField, T value, Expression<Func<T>> propertyExpression)
