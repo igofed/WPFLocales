@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{34328DBA-193F-480C-B2E0-92E460554D95}</ProjectGuid>
+    <ProjectGuid>{1670BA3A-9825-4583-8330-8214DA3BE189}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SampleApplication</RootNamespace>
     <AssemblyName>SampleApplication</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -54,9 +53,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DelegateCommand.cs" />
+    <Compile Include="Localization\DesignTimeData\ENDesignTimeLocale.cs" />
     <Compile Include="StateToTextConverter.cs" />
-    <Compile Include="ViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -65,15 +63,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DelegateCommand.cs" />
+    <Compile Include="Localization\DesignTimeData\RUDesignTimeLocale.cs" />
+    <Compile Include="Localization\LocalizationKeys.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Properties\LocalizationAssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,13 +91,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Locales\RU.locale">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Locales\EN.locale">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </None>
+    <Content Include="Locales\RU.locale">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Locales\EN.locale">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -105,15 +107,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WpfLocales.Model\WPFLocales.Model.csproj">
+    <ProjectReference Include="..\..\Library\WpfLocales.Model\WPFLocales.Model.csproj">
       <Project>{a18f2aeb-162f-4ce2-a710-bdfd259909ca}</Project>
       <Name>WPFLocales.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WPFLocales.Powershell\WPFLocales.Powershell.csproj">
-      <Project>{E38A5761-B723-469A-B179-1875FDFFD917}</Project>
+    <ProjectReference Include="..\..\Library\WPFLocales.Powershell\WPFLocales.Powershell.csproj">
+      <Project>{e38a5761-b723-469a-b179-1875fdffd917}</Project>
       <Name>WPFLocales.Powershell</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WPFLocales\WPFLocales.csproj">
+    <ProjectReference Include="..\..\Library\WPFLocales\WPFLocales.csproj">
       <Project>{5f84b180-22a9-4c72-8e3b-a0c5d72b0868}</Project>
       <Name>WPFLocales</Name>
     </ProjectReference>
