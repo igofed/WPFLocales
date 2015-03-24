@@ -1,0 +1,19 @@
+<Locale Key="EN" Title="EN" >
+		<Group Key="SampleApplication" Comment="TEST">
+					<Item Key="StateLabelContent" Comment="Состояние бла бла бла">State:</Item>
+					<Item Key="StateLabelContentFormat" Comment="">State: {0}</Item>
+					<Item Key="StateErrorText" Comment="">Error</Item>
+					<Item Key="StateOkText" Comment="">OK</Item>
+					<Item Key="ChangeStateButtonContent" Comment="">Change state</Item>
+					<Item Key="LocaleLabelContent" Comment="">Locale:</Item>
+			</Group>
+		<Group Key="SampleApplication2" Comment="">
+					<Item Key="StateLabelContent" Comment="">State:</Item>
+					<Item Key="StateLabelContentFormat" Comment="">State: {0}</Item>
+					<Item Key="StateErrorText" Comment="">Error</Item>
+					<Item Key="StateOkText" Comment="">OK</Item>
+					<Item Key="ChangeStateButtonContent" Comment="">Change state</Item>
+					<Item Key="LocaleLabelContent" Comment="">Locale:</Item>
+			</Group>
+	
+</Locale>

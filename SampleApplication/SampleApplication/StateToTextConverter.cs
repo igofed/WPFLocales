@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SampleApplication.Localization;
 using WPFLocales.View;
 
 namespace SampleApplication
 {
-    public class StateToTextConverter : LocalizableConverter
+    class StateToTextConverter : LocalizableConverter
     {
         public StateToTextConverter()
         {
@@ -17,9 +22,9 @@ namespace SampleApplication
             {
                 var state = (State)value;
                 if (state == State.Error)
-                    return GetLocalizedString(LocaleKeys.SampleApplication.StateErrorText);
-                if(state == State.Ok)
-                    return GetLocalizedString(LocaleKeys.SampleApplication.StateOkText);
+                    return GetLocalizedString(LocalizationKeys.SampleApplication.StateErrorText);
+                if (state == State.Ok)
+                    return GetLocalizedString(LocalizationKeys.SampleApplication.StateOkText);
             }
             return "";
         }

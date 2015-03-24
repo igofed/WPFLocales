@@ -1,12 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using WPFLocales;
 
 namespace SampleApplication
 {
-    class ViewModel : INotifyPropertyChanged
+    class MainWindowViewModel
     {
         public State State
         {
@@ -26,7 +30,7 @@ namespace SampleApplication
 
         public ICommand ChangeStateCommand { get; set; }
 
-        public ViewModel()
+        public MainWindowViewModel()
         {
             if (WPFLocales.Localization.AvailableLocales != null)
             {
@@ -42,7 +46,8 @@ namespace SampleApplication
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            if(PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 

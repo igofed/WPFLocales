@@ -10,8 +10,6 @@ namespace SampleApplication
         public MainWindow()
         {
             InitializeComponent();
-
-            DataContext = new ViewModel();
         }
     }
 }
