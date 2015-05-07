@@ -83,6 +83,7 @@
     <Compile Include="Utils\LocaleInfo.cs" />
     <Compile Include="Utils\LocalizationAssemblyInfo.cs" />
     <Compile Include="Utils\DteUtils.cs" />
+    <Compile Include="Utils\VSAutomationHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

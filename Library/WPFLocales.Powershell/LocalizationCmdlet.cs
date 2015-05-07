@@ -22,7 +22,6 @@ namespace WPFLocales.Powershell
 
         protected override void BeginProcessing()
         {
-
             var variableValue = GetVariableValue("DTE");
 #if DEBUG
             _dte = (DTE) (variableValue as PSObject).BaseObject;
@@ -31,7 +30,6 @@ namespace WPFLocales.Powershell
 #endif
             FindLocalizationInfo();
         }
-
 
         protected void WriteErrorLine(string line)
         {
