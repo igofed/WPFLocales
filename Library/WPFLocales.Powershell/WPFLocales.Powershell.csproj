@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddLocale.cs" />
+    <Compile Include="GetDTE.cs" />
     <Compile Include="GetLocales.cs" />
     <Compile Include="EnableLocalization.cs" />
     <Compile Include="LocalizationCmdlet.cs" />
@@ -90,6 +91,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="debug.PS1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Templates\DesignTimeLocaleTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>DesignTimeLocaleTemplate.cs</LastGenOutput>

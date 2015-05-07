@@ -10,6 +10,7 @@ using WPFLocales.Model;
 using WPFLocales.Powershell.Properties;
 using WPFLocales.Powershell.Templates;
 using WPFLocales.Powershell.Utils;
+using Process = System.Diagnostics.Process;
 
 namespace WPFLocales.Powershell
 {
@@ -21,8 +22,13 @@ namespace WPFLocales.Powershell
 
         protected override void BeginProcessing()
         {
-            _dte = (DTE)GetVariableValue("DTE");
 
+            var variableValue = GetVariableValue("DTE");
+#if DEBUG
+            _dte = (DTE) (variableValue as PSObject).BaseObject;
+#else
+            _dte = (DTE)variableValue;
+#endif
             FindLocalizationInfo();
         }
 
