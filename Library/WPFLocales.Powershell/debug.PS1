@@ -2,7 +2,7 @@
 $TargetProjPath				= "D:\Development\eas-client\src\EmergencyAlertSystem\EmergencyAlertSystem.csproj"
 
 Import-Module $OutputDllPath
-$DTE = Get-DTE -ProjPath $TargetProjPath
+$DTE = Get-DTE -TargetProjPath $TargetProjPath
 $Env:DTE = $DTE
 
 Sync-Localization

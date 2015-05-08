@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Runtime.InteropServices;
@@ -13,7 +14,13 @@ namespace WPFLocales.Powershell
     public class GetDTE : PSCmdlet
     {
         [Parameter(Mandatory = true, HelpMessage = "Path to project", Position = 1)]
-        public string ProjPath { get; set; }
+        public string TargetProjPath { get; set; }
+
+        protected override void BeginProcessing()
+        {
+            if (!File.Exists(TargetProjPath))
+                throw new FileNotFoundException(TargetProjPath + " not found.");
+        }
 
         protected override void ProcessRecord()
         {
@@ -22,7 +29,7 @@ namespace WPFLocales.Powershell
             DTE dte;
             if (!GetDte("devenv", out dte))
             {
-                Process.Start(ProjPath);
+                Process.Start(TargetProjPath);
                 while (!GetDte("devenv", out dte))
                     Thread.Sleep(1000);
             }
@@ -37,7 +44,7 @@ namespace WPFLocales.Powershell
             dte = Process.GetProcessesByName(processName)
                          .Select(x => VSAutomationHelper.GetDTE(x.Id))
                          .FirstOrDefault(dte1 =>
-                             dte1 != null && dte1.Solution.GetProjects().Any(x => x.FileName == ProjPath));
+                             dte1 != null && dte1.Solution.GetProjects().Any(x => x.FileName == TargetProjPath));
             return dte != null;
         }
     }
