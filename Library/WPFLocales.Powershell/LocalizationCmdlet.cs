@@ -60,7 +60,8 @@ namespace WPFLocales.Powershell
                 var designTimeLocaleFileName = string.Format("{0}DesignTimeLocale.cs", name);
                 var designTimeLocaleItem = _localizationInfo.LocalizationDesignDataDirectory.GetProjectItemItems().FirstOrDefault(i => i.Name == designTimeLocaleFileName);
 
-                //todo: throw if file missing /\/\/\/\
+                if (designTimeLocaleItem == null)
+                    throw new FileNotFoundException(string.Format("{0} not found. Possibly {1} locale have been added manually. Use Add-Locale for add locale.", designTimeLocaleFileName, name));
 
                 using (var reader = new StreamReader(fullPath))
                 {
