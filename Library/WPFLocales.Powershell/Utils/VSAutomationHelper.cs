@@ -7,10 +7,25 @@ namespace WPFLocales.Powershell.Utils
 {
     public class VSAutomationHelper
     {
-        public static DTE GetDTE(int processId)
+        public static DTE GetDTE(int processId, VisualStudioVersion vsVersion)
         {
-            string progId = "!VisualStudio.DTE.12.0:" + processId;
+            string progId = null;
             object runningObject = null;
+
+            switch (vsVersion)
+            {
+                case VisualStudioVersion.VisualStudio2012:
+                    progId = "!VisualStudio.DTE.12.0:" + processId;
+                    break;
+                case VisualStudioVersion.VisualStudio2013:
+                    progId = "!VisualStudio.DTE.12.0:" + processId;
+                    break;
+                case VisualStudioVersion.VisualStudio2015:
+                    progId = "!VisualStudio.DTE.14.0:" + processId;
+                    break;
+                default:
+                    throw new NotSupportedException(vsVersion.ToString());
+            }
 
             IBindCtx bindCtx = null;
             IRunningObjectTable runningObjects = null;
@@ -49,7 +64,9 @@ namespace WPFLocales.Powershell.Utils
                     }
                 }
             }
-            catch (Exception e) {}
+            catch (Exception e)
+            {
+            }
             finally
             {
                 if (enumMonikers != null)
