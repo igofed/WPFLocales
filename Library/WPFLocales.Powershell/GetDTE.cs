@@ -16,8 +16,8 @@ namespace WPFLocales.Powershell
         [Parameter(Mandatory = true, HelpMessage = "Path to project")]
         public string TargetProjPath { get; set; }
 
-        [Parameter(Mandatory = true, HelpMessage = "VS DTE version")]
-        public VisualStudioVersion VsDteVersion { get; set; }
+        [Parameter(Mandatory = true, HelpMessage = "Visual Studio version")]
+        public VisualStudioVersion VsVersion { get; set; }
 
         protected override void BeginProcessing()
         {
@@ -45,7 +45,7 @@ namespace WPFLocales.Powershell
         private bool GetDte(string processName, out DTE dte)
         {
             dte = Process.GetProcessesByName(processName)
-                         .Select(x => VSAutomationHelper.GetDTE(x.Id, VsDteVersion))
+                         .Select(x => VSAutomationHelper.GetDTE(x.Id, VsVersion))
                          .FirstOrDefault(dte1 =>
                              dte1 != null && dte1.Solution.GetProjects().Any(x => x.FileName == TargetProjPath));
             return dte != null;
