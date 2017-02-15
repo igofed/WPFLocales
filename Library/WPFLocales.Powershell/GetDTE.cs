@@ -16,9 +16,6 @@ namespace WPFLocales.Powershell
         [Parameter(Mandatory = true, HelpMessage = "Path to project")]
         public string TargetProjPath { get; set; }
 
-        [Parameter(Mandatory = true, HelpMessage = "Visual Studio version")]
-        public VisualStudioVersion VsVersion { get; set; }
-
         protected override void BeginProcessing()
         {
             if (!File.Exists(TargetProjPath))
@@ -28,7 +25,6 @@ namespace WPFLocales.Powershell
         protected override void ProcessRecord()
         {
             MessageFilter.Register();
-
             DTE dte;
             if (!GetDte("devenv", out dte))
             {
@@ -45,7 +41,7 @@ namespace WPFLocales.Powershell
         private bool GetDte(string processName, out DTE dte)
         {
             dte = Process.GetProcessesByName(processName)
-                         .Select(x => VSAutomationHelper.GetDTE(x.Id, VsVersion))
+                         .Select(x => VSAutomationHelper.GetDTE(x.Id))
                          .FirstOrDefault(dte1 =>
                              dte1 != null && dte1.Solution.GetProjects().Any(x => x.FileName == TargetProjPath));
             return dte != null;
