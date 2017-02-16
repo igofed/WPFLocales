@@ -13,7 +13,7 @@ namespace WPFLocales.Powershell
     [Cmdlet(VerbsCommon.Get, "DTE")]
     public class GetDTE : PSCmdlet
     {
-        [Parameter(Mandatory = true, HelpMessage = "Path to project", Position = 1)]
+        [Parameter(Mandatory = true, HelpMessage = "Path to project")]
         public string TargetProjPath { get; set; }
 
         protected override void BeginProcessing()
@@ -25,7 +25,6 @@ namespace WPFLocales.Powershell
         protected override void ProcessRecord()
         {
             MessageFilter.Register();
-
             DTE dte;
             if (!GetDte("devenv", out dte))
             {

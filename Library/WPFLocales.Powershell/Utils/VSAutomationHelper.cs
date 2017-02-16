@@ -9,7 +9,7 @@ namespace WPFLocales.Powershell.Utils
     {
         public static DTE GetDTE(int processId)
         {
-            string progId = "!VisualStudio.DTE.12.0:" + processId;
+            var progId = "VisualStudio.DTE";
             object runningObject = null;
 
             IBindCtx bindCtx = null;
@@ -42,14 +42,16 @@ namespace WPFLocales.Powershell.Utils
                         // Do nothing, there is something in the ROT that we do not have access to.
                     }
 
-                    if (!string.IsNullOrEmpty(name) && string.Equals(name, progId, StringComparison.Ordinal))
+                    if (!string.IsNullOrEmpty(name) && name.Contains(progId))
                     {
                         Marshal.ThrowExceptionForHR(runningObjects.GetObject(runningObjectMoniker, out runningObject));
                         break;
                     }
                 }
             }
-            catch (Exception e) {}
+            catch (Exception e)
+            {
+            }
             finally
             {
                 if (enumMonikers != null)

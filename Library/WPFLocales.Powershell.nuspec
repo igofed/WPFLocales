@@ -2,13 +2,16 @@
   <metadata>
     <id>WPFLocales.Powershell</id>
 	<title>WPFLocales PowerShell extensions</title>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <authors>Igor Fedchun (mail@itornotit.com)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<licenseUrl>https://github.com/igofed/WPFLocales/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/igofed/WPFLocales</projectUrl>
 	<iconUrl>https://github.com/igofed/WPFLocales/blob/master/Library/icon.png</iconUrl>
     <description>PowerShell extension for WPFLocales</description>
+	<dependencies>
+      <dependency id="System.Management.Automation"/>
+    </dependencies> 
   </metadata>
   <files>
     <file src="WPFLocales.Powershell\bin\Release\WPFLocales.Powershell.dll" target="tools" />
